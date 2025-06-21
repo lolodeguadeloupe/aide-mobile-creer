@@ -1,6 +1,7 @@
 
-# Utiliser Node.js 20
-FROM node:20-alpine
+
+# Utiliser Node.js 22
+FROM node:22-alpine
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -22,3 +23,4 @@ EXPOSE 3000
 
 # Commande de démarrage
 CMD ["npm", "start"]
+
