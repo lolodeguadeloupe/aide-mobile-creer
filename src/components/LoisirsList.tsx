@@ -13,8 +13,7 @@ interface LoisirsListProps {
 
 const LoisirsList: React.FC<LoisirsListProps> = ({ onEditLoisir }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: loisirs, isLoading, error } = useLoisirs(searchTerm);
-  const { deleteLoisir } = useLoisirs();
+  const { data: loisirs, isLoading, error, deleteLoisir } = useLoisirs(searchTerm);
   const { toast } = useToast();
 
   const handleDelete = async (id: number) => {
