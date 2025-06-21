@@ -7,6 +7,7 @@ import CarModelBasicInfoSection from './CarModelBasicInfoSection';
 import CarModelSpecsSection from './CarModelSpecsSection';
 import CarModelCompanySection from './CarModelCompanySection';
 import CarModelFormActions from './CarModelFormActions';
+import ImageUploadManager from './ImageUploadManager';
 
 interface CarRentalFormProps {
   carRental?: any;
@@ -23,6 +24,7 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
     price_per_day: 0,
     company_id: 0,
     image: '',
+    gallery_images: [] as string[],
     is_active: true,
   });
 
@@ -40,6 +42,7 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
         price_per_day: carRental.price_per_day || 0,
         company_id: carRental.company_id || 0,
         image: carRental.image || '',
+        gallery_images: carRental.gallery_images || [],
         is_active: carRental.is_active ?? true,
       });
     }
@@ -67,8 +70,22 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
     }));
   };
 
+  const handleMainImageChange = (url: string) => {
+    setFormData(prev => ({
+      ...prev,
+      image: url
+    }));
+  };
+
+  const handleGalleryImagesChange = (urls: string[]) => {
+    setFormData(prev => ({
+      ...prev,
+      gallery_images: urls
+    }));
+  };
+
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-4xl mx-auto">
       <CardHeader>
         <CardTitle>
           {carRental ? 'Modifier le modèle de voiture' : 'Nouveau modèle de voiture'}
@@ -100,6 +117,13 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
               is_active: formData.is_active
             }}
             onInputChange={handleInputChange}
+          />
+
+          <ImageUploadManager
+            mainImage={formData.image}
+            galleryImages={formData.gallery_images}
+            onMainImageChange={handleMainImageChange}
+            onGalleryImagesChange={handleGalleryImagesChange}
           />
 
           <CarModelFormActions

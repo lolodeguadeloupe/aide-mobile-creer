@@ -50,17 +50,6 @@ const CarModelBasicInfoSection: React.FC<CarModelBasicInfoSectionProps> = ({
           </SelectContent>
         </Select>
       </div>
-
-      <div>
-        <Label htmlFor="image">URL de l'image</Label>
-        <Input
-          id="image"
-          type="url"
-          value={formData.image}
-          onChange={(e) => onInputChange('image', e.target.value)}
-          placeholder="https://..."
-        />
-      </div>
     </div>
   );
 };
