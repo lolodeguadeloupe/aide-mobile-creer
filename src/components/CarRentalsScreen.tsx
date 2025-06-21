@@ -7,15 +7,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CarRentalCompaniesList from './CarRentalCompaniesList';
 import CarRentalCompanyForm from './CarRentalCompanyForm';
 import CarModelsList from './CarModelsList';
+import CarRentalForm from './CarRentalForm';
 
 const CarRentalsScreen = () => {
   const navigate = useNavigate();
   const [showCompanyForm, setShowCompanyForm] = useState(false);
+  const [showModelForm, setShowModelForm] = useState(false);
   const [editingCompany, setEditingCompany] = useState(null);
+  const [editingModel, setEditingModel] = useState(null);
 
   const handleEditCompany = (company: any) => {
     setEditingCompany(company);
     setShowCompanyForm(true);
+  };
+
+  const handleEditModel = (model: any) => {
+    setEditingModel(model);
+    setShowModelForm(true);
   };
 
   const handleCloseCompanyForm = () => {
@@ -23,9 +31,19 @@ const CarRentalsScreen = () => {
     setEditingCompany(null);
   };
 
+  const handleCloseModelForm = () => {
+    setShowModelForm(false);
+    setEditingModel(null);
+  };
+
   const handleNewCompany = () => {
     setEditingCompany(null);
     setShowCompanyForm(true);
+  };
+
+  const handleNewModel = () => {
+    setEditingModel(null);
+    setShowModelForm(true);
   };
 
   if (showCompanyForm) {
@@ -44,6 +62,27 @@ const CarRentalsScreen = () => {
         <CarRentalCompanyForm
           company={editingCompany}
           onClose={handleCloseCompanyForm}
+        />
+      </div>
+    );
+  }
+
+  if (showModelForm) {
+    return (
+      <div className="min-h-screen bg-gray-50 p-4">
+        <div className="mb-4">
+          <Button
+            variant="ghost"
+            onClick={handleCloseModelForm}
+            className="mb-4"
+          >
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Retour à la liste
+          </Button>
+        </div>
+        <CarRentalForm
+          carRental={editingModel}
+          onClose={handleCloseModelForm}
         />
       </div>
     );
@@ -83,10 +122,16 @@ const CarRentalsScreen = () => {
               </TabsTrigger>
             </TabsList>
             
-            <Button onClick={handleNewCompany}>
-              <Plus className="h-4 w-4 mr-2" />
-              Nouvelle compagnie
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={handleNewCompany}>
+                <Plus className="h-4 w-4 mr-2" />
+                Nouvelle compagnie
+              </Button>
+              <Button onClick={handleNewModel} variant="outline">
+                <Plus className="h-4 w-4 mr-2" />
+                Nouveau modèle
+              </Button>
+            </div>
           </div>
 
           <TabsContent value="companies">
