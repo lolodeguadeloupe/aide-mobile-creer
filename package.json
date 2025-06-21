@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "preinstall": "npx check-node-version --node 20"
+    "preinstall": "npx check-node-version --node 22"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.0",
