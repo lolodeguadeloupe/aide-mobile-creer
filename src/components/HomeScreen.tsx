@@ -1,7 +1,14 @@
 
-import { Bell, Plus, TrendingUp, Star, Users } from 'lucide-react';
+import { Bell, Plus, TrendingUp, Star, Users, LogIn } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
 
-const HomeScreen = () => {
+interface HomeScreenProps {
+  onShowAuth: () => void;
+}
+
+const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
+  const { user } = useAuth();
+
   const stats = [
     { label: 'Utilisateurs actifs', value: '2.4K', icon: Users, color: 'bg-blue-500' },
     { label: 'Croissance', value: '+15%', icon: TrendingUp, color: 'bg-green-500' },
@@ -19,13 +26,26 @@ const HomeScreen = () => {
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Bonjour!</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {user ? `Bonjour ${user.email?.split('@')[0]} !` : 'Bonjour !'}
+          </h1>
           <p className="text-gray-600">Bienvenue dans votre app</p>
         </div>
-        <button className="relative p-2 bg-white rounded-full shadow-md">
-          <Bell size={20} className="text-gray-600" />
-          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
-        </button>
+        <div className="flex items-center gap-2">
+          {!user && (
+            <button 
+              onClick={onShowAuth}
+              className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-full text-sm font-medium hover:bg-blue-600 transition-colors"
+            >
+              <LogIn size={16} />
+              Connexion
+            </button>
+          )}
+          <button className="relative p-2 bg-white rounded-full shadow-md">
+            <Bell size={20} className="text-gray-600" />
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+          </button>
+        </div>
       </div>
 
       {/* Stats Cards */}

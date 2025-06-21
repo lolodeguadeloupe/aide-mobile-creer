@@ -1,18 +1,38 @@
 
 import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
 import MobileNavigation from '@/components/MobileNavigation';
 import HomeScreen from '@/components/HomeScreen';
 import ProfileScreen from '@/components/ProfileScreen';
 import SettingsScreen from '@/components/SettingsScreen';
+import AuthScreen from '@/components/AuthScreen';
+import UserProfile from '@/components/UserProfile';
 import { Search, Heart } from 'lucide-react';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('home');
+  const [showAuth, setShowAuth] = useState(false);
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (showAuth) {
+    return <AuthScreen onBack={() => setShowAuth(false)} />;
+  }
 
   const renderScreen = () => {
     switch (activeTab) {
       case 'home':
-        return <HomeScreen />;
+        return <HomeScreen onShowAuth={() => setShowAuth(true)} />;
       case 'search':
         return (
           <div className="flex-1 bg-gradient-to-br from-green-50 to-blue-50 p-4 pb-24 flex items-center justify-center">
@@ -34,11 +54,11 @@ const Index = () => {
           </div>
         );
       case 'profile':
-        return <ProfileScreen />;
+        return user ? <UserProfile /> : <ProfileScreen />;
       case 'settings':
         return <SettingsScreen />;
       default:
-        return <HomeScreen />;
+        return <HomeScreen onShowAuth={() => setShowAuth(true)} />;
     }
   };
 
