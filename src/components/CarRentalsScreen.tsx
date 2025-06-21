@@ -139,7 +139,7 @@ const CarRentalsScreen = () => {
           </TabsContent>
           
           <TabsContent value="models">
-            <CarModelsList />
+            <CarModelsList onEditCarModel={handleEditModel} />
           </TabsContent>
         </Tabs>
       </div>
