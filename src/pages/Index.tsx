@@ -44,6 +44,13 @@ const Index = () => {
             >
               Gérer les restaurants
             </Button>
+            <Button
+              onClick={() => navigate('/concerts')}
+              variant="outline"
+              className="w-full justify-start"
+            >
+              Gérer les concerts
+            </Button>
           </div>
         </div>
       </div>
