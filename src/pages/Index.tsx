@@ -1,71 +1,38 @@
 
-import { useState } from 'react';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import MobileNavigation from '@/components/MobileNavigation';
-import HomeScreen from '@/components/HomeScreen';
-import ProfileScreen from '@/components/ProfileScreen';
-import SettingsScreen from '@/components/SettingsScreen';
 import AuthScreen from '@/components/AuthScreen';
-import UserProfile from '@/components/UserProfile';
-import { Search, Heart } from 'lucide-react';
+import HomeScreen from '@/components/HomeScreen';
 
 const Index = () => {
-  const [activeTab, setActiveTab] = useState('home');
-  const [showAuth, setShowAuth] = useState(false);
-  const { user, loading } = useAuth();
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement...</p>
-        </div>
-      </div>
-    );
+  if (!user) {
+    return <AuthScreen />;
   }
-
-  if (showAuth) {
-    return <AuthScreen onBack={() => setShowAuth(false)} />;
-  }
-
-  const renderScreen = () => {
-    switch (activeTab) {
-      case 'home':
-        return <HomeScreen onShowAuth={() => setShowAuth(true)} />;
-      case 'search':
-        return (
-          <div className="flex-1 bg-gradient-to-br from-green-50 to-blue-50 p-4 pb-24 flex items-center justify-center">
-            <div className="text-center">
-              <Search size={48} className="text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Recherche</h2>
-              <p className="text-gray-600">Fonctionnalité de recherche à venir</p>
-            </div>
-          </div>
-        );
-      case 'favorites':
-        return (
-          <div className="flex-1 bg-gradient-to-br from-pink-50 to-red-50 p-4 pb-24 flex items-center justify-center">
-            <div className="text-center">
-              <Heart size={48} className="text-gray-400 mx-auto mb-4" />
-              <h2 className="text-xl font-bold text-gray-900 mb-2">Favoris</h2>
-              <p className="text-gray-600">Vos éléments favoris apparaîtront ici</p>
-            </div>
-          </div>
-        );
-      case 'profile':
-        return user ? <UserProfile /> : <ProfileScreen />;
-      case 'settings':
-        return <SettingsScreen />;
-      default:
-        return <HomeScreen onShowAuth={() => setShowAuth(true)} />;
-    }
-  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {renderScreen()}
-      <MobileNavigation activeTab={activeTab} onTabChange={setActiveTab} />
+    <div className="min-h-screen bg-gray-50">
+      <HomeScreen />
+      
+      {/* Navigation rapide */}
+      <div className="p-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Gestion</h2>
+          <div className="space-y-2">
+            <Button
+              onClick={() => navigate('/accommodations')}
+              variant="outline"
+              className="w-full justify-start"
+            >
+              Gérer les hébergements
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
