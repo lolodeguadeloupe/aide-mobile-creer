@@ -29,7 +29,7 @@ export const useAccommodations = () => {
       const { data, error } = await supabase
         .from('accommodations')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('id', { ascending: false });
       
       if (error) throw error;
       return data as Accommodation[];
