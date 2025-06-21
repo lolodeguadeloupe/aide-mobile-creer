@@ -4,6 +4,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCreateAccommodation, useUpdateAccommodation, Accommodation } from '@/hooks/useAccommodations';
+import ImageUploadManager from './ImageUploadManager';
 
 interface AccommodationFormProps {
   accommodation?: Accommodation | null;
@@ -26,7 +27,7 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
     bathrooms: 1,
     max_guests: 2,
     image: '',
-    gallery_images: [],
+    gallery_images: [] as string[],
     features: [],
     amenities: [],
     rules: [],
@@ -46,7 +47,9 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
         bathrooms: accommodation.bathrooms || 1,
         max_guests: accommodation.max_guests || 2,
         image: accommodation.image || '',
-        gallery_images: accommodation.gallery_images || [],
+        gallery_images: Array.isArray(accommodation.gallery_images) 
+          ? accommodation.gallery_images 
+          : [],
         features: accommodation.features || [],
         amenities: accommodation.amenities || [],
         rules: accommodation.rules || [],
@@ -57,6 +60,10 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.image) {
+      return;
+    }
     
     try {
       if (isEditing && accommodation) {
@@ -158,20 +165,18 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
                   required
                 />
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  URL de l'image *
-                </label>
-                <Input
-                  type="url"
-                  value={formData.image}
-                  onChange={(e) => handleInputChange('image', e.target.value)}
-                  placeholder="https://example.com/image.jpg"
-                  required
-                />
-              </div>
             </div>
+          </div>
+
+          {/* Section Images */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
+            <h2 className="text-lg font-medium text-gray-900 mb-4">Images</h2>
+            <ImageUploadManager
+              mainImage={formData.image}
+              galleryImages={formData.gallery_images}
+              onMainImageChange={(url) => handleInputChange('image', url)}
+              onGalleryImagesChange={(urls) => handleInputChange('gallery_images', urls)}
+            />
           </div>
 
           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
@@ -265,7 +270,7 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={createAccommodation.isPending || updateAccommodation.isPending}
+              disabled={createAccommodation.isPending || updateAccommodation.isPending || !formData.image}
             >
               {createAccommodation.isPending || updateAccommodation.isPending
                 ? 'Sauvegarde...'
