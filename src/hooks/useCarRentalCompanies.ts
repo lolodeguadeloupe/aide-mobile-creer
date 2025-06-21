@@ -29,17 +29,9 @@ export const useCarRentalCompanies = () => {
   // Create car rental company
   const createCompany = useMutation({
     mutationFn: async (company: any) => {
-      // Ensure gallery_images is properly formatted
-      const companyData = {
-        ...company,
-        gallery_images: typeof company.gallery_images === 'string' 
-          ? JSON.parse(company.gallery_images) 
-          : company.gallery_images || []
-      };
-
       const { data, error } = await supabase
         .from('car_rental_companies')
-        .insert([companyData])
+        .insert([company])
         .select();
       
       if (error) throw error;
@@ -64,17 +56,9 @@ export const useCarRentalCompanies = () => {
 
   const updateCompany = useMutation({
     mutationFn: async ({ id, ...company }: any) => {
-      // Ensure gallery_images is properly formatted
-      const companyData = {
-        ...company,
-        gallery_images: typeof company.gallery_images === 'string' 
-          ? JSON.parse(company.gallery_images) 
-          : company.gallery_images || []
-      };
-
       const { data, error } = await supabase
         .from('car_rental_companies')
-        .update(companyData)
+        .update(company)
         .eq('id', id)
         .select();
       
