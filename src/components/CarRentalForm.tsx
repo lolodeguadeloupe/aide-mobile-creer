@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCarModels } from '@/hooks/useCarModels';
@@ -96,8 +95,7 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
           <CarModelBasicInfoSection
             formData={{
               name: formData.name,
-              category: formData.category,
-              image: formData.image
+              category: formData.category
             }}
             onInputChange={handleInputChange}
           />

@@ -8,7 +8,6 @@ interface CarModelBasicInfoSectionProps {
   formData: {
     name: string;
     category: string;
-    image: string;
   };
   onInputChange: (field: string, value: any) => void;
 }
