@@ -13,6 +13,7 @@ import ConcertsScreen from "./components/ConcertsScreen";
 import NightlifeScreen from "./components/NightlifeScreen";
 import LoisirsScreen from "./components/LoisirsScreen";
 import ActivitiesScreen from "./components/ActivitiesScreen";
+import CarRentalsScreen from "./components/CarRentalsScreen";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/nightlife" element={<NightlifeScreen />} />
             <Route path="/loisirs" element={<LoisirsScreen />} />
             <Route path="/activities" element={<ActivitiesScreen />} />
+            <Route path="/car-rentals" element={<CarRentalsScreen />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
