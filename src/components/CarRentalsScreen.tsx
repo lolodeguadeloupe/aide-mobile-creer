@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import CarRentalCompaniesList from './CarRentalCompaniesList';
 import CarRentalCompanyForm from './CarRentalCompanyForm';
+import CarModelsList from './CarModelsList';
 
 const CarRentalsScreen = () => {
   const navigate = useNavigate();
@@ -93,10 +94,7 @@ const CarRentalsScreen = () => {
           </TabsContent>
           
           <TabsContent value="models">
-            <div className="text-center p-8">
-              <Car className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <p className="text-gray-500">Gestion des modèles de voitures à venir...</p>
-            </div>
+            <CarModelsList />
           </TabsContent>
         </Tabs>
       </div>
