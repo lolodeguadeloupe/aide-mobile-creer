@@ -3,18 +3,24 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
-export const useLoisirs = () => {
+export const useLoisirs = (searchTerm?: string) => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  // Fetch loisirs
+  // Fetch loisirs with optional search
   const { data, isLoading, error } = useQuery({
-    queryKey: ['loisirs'],
+    queryKey: ['loisirs', searchTerm],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from('loisirs')
         .select('*')
         .order('title');
+
+      if (searchTerm && searchTerm.trim()) {
+        query = query.or(`title.ilike.%${searchTerm}%,description.ilike.%${searchTerm}%,location.ilike.%${searchTerm}%`);
+      }
+      
+      const { data, error } = await query;
       
       if (error) throw error;
       return data;
@@ -49,7 +55,6 @@ export const useLoisirs = () => {
     },
   });
 
-  // Update loisir
   const updateLoisir = useMutation({
     mutationFn: async ({ id, ...loisir }: any) => {
       const { data, error } = await supabase
@@ -78,7 +83,6 @@ export const useLoisirs = () => {
     },
   });
 
-  // Delete loisir
   const deleteLoisir = useMutation({
     mutationFn: async (id: number) => {
       const { error } = await supabase
