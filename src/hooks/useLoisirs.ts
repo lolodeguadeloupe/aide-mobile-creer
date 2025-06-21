@@ -2,36 +2,19 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { useState, useEffect } from 'react';
 
-export const useLoisirs = (searchTerm?: string) => {
+export const useLoisirs = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm);
 
-  // Debounce search term
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setDebouncedSearchTerm(searchTerm);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [searchTerm]);
-
-  // Fetch loisirs with debounced search
+  // Fetch all loisirs once
   const { data, isLoading, error } = useQuery({
-    queryKey: ['loisirs', debouncedSearchTerm],
+    queryKey: ['loisirs'],
     queryFn: async () => {
-      let query = supabase
+      const { data, error } = await supabase
         .from('loisirs')
         .select('*')
         .order('title');
-
-      if (debouncedSearchTerm && debouncedSearchTerm.trim()) {
-        query = query.or(`title.ilike.%${debouncedSearchTerm}%,description.ilike.%${debouncedSearchTerm}%,location.ilike.%${debouncedSearchTerm}%`);
-      }
-      
-      const { data, error } = await query;
       
       if (error) throw error;
       return data;

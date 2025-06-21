@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -13,8 +13,24 @@ interface LoisirsListProps {
 
 const LoisirsList: React.FC<LoisirsListProps> = ({ onEditLoisir }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: loisirs, isLoading, error, deleteLoisir } = useLoisirs(searchTerm);
+  const { data: allLoisirs, isLoading, error, deleteLoisir } = useLoisirs();
   const { toast } = useToast();
+
+  // Filter loisirs based on search term (client-side filtering)
+  const filteredLoisirs = useMemo(() => {
+    if (!allLoisirs) return [];
+    
+    if (!searchTerm.trim()) {
+      return allLoisirs;
+    }
+
+    const searchLower = searchTerm.toLowerCase();
+    return allLoisirs.filter(loisir => 
+      loisir.title?.toLowerCase().includes(searchLower) ||
+      loisir.description?.toLowerCase().includes(searchLower) ||
+      loisir.location?.toLowerCase().includes(searchLower)
+    );
+  }, [allLoisirs, searchTerm]);
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce loisir ?')) {
@@ -65,14 +81,14 @@ const LoisirsList: React.FC<LoisirsListProps> = ({ onEditLoisir }) => {
       </div>
 
       {/* Results */}
-      {!loisirs || loisirs.length === 0 ? (
+      {!filteredLoisirs || filteredLoisirs.length === 0 ? (
         <div className="text-center py-8">
           <div className="text-gray-500">
             {searchTerm ? 'Aucun loisir trouvé pour cette recherche' : 'Aucun loisir trouvé'}
           </div>
         </div>
       ) : (
-        loisirs.map((loisir) => (
+        filteredLoisirs.map((loisir) => (
           <Card key={loisir.id} className="overflow-hidden">
             <CardContent className="p-0">
               <div className="flex">
