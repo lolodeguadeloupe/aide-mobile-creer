@@ -51,6 +51,13 @@ const Index = () => {
             >
               Gérer les concerts
             </Button>
+            <Button
+              onClick={() => navigate('/nightlife')}
+              variant="outline"
+              className="w-full justify-start"
+            >
+              Gérer les soirées
+            </Button>
           </div>
         </div>
       </div>
