@@ -1,0 +1,88 @@
+
+import { Bell, Plus, TrendingUp, Star, Users } from 'lucide-react';
+
+const HomeScreen = () => {
+  const stats = [
+    { label: 'Utilisateurs actifs', value: '2.4K', icon: Users, color: 'bg-blue-500' },
+    { label: 'Croissance', value: '+15%', icon: TrendingUp, color: 'bg-green-500' },
+    { label: 'Évaluations', value: '4.8', icon: Star, color: 'bg-yellow-500' },
+  ];
+
+  const recentActivities = [
+    { title: 'Nouveau utilisateur inscrit', time: 'Il y a 2 min', avatar: '👤' },
+    { title: 'Mise à jour déployée', time: 'Il y a 1h', avatar: '🚀' },
+    { title: 'Feedback reçu', time: 'Il y a 3h', avatar: '💬' },
+  ];
+
+  return (
+    <div className="flex-1 bg-gradient-to-br from-blue-50 to-purple-50 p-4 pb-24">
+      {/* Header */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Bonjour!</h1>
+          <p className="text-gray-600">Bienvenue dans votre app</p>
+        </div>
+        <button className="relative p-2 bg-white rounded-full shadow-md">
+          <Bell size={20} className="text-gray-600" />
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
+        </button>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 gap-4 mb-6">
+        {stats.map((stat, index) => {
+          const Icon = stat.icon;
+          return (
+            <div
+              key={index}
+              className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-all duration-200"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-600 text-sm mb-1">{stat.label}</p>
+                  <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                </div>
+                <div className={`p-3 rounded-xl ${stat.color}`}>
+                  <Icon size={24} className="text-white" />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Quick Actions */}
+      <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Actions rapides</h3>
+        <div className="grid grid-cols-2 gap-3">
+          <button className="flex items-center justify-center p-4 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors">
+            <Plus size={20} className="text-blue-600 mr-2" />
+            <span className="text-blue-600 font-medium">Nouveau</span>
+          </button>
+          <button className="flex items-center justify-center p-4 bg-purple-50 rounded-xl border border-purple-100 hover:bg-purple-100 transition-colors">
+            <TrendingUp size={20} className="text-purple-600 mr-2" />
+            <span className="text-purple-600 font-medium">Analytics</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Recent Activity */}
+      <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
+        <h3 className="text-lg font-semibold text-gray-900 mb-3">Activité récente</h3>
+        <div className="space-y-3">
+          {recentActivities.map((activity, index) => (
+            <div key={index} className="flex items-center p-3 bg-gray-50 rounded-xl">
+              <div className="text-2xl mr-3">{activity.avatar}</div>
+              <div className="flex-1">
+                <p className="text-gray-900 font-medium text-sm">{activity.title}</p>
+                <p className="text-gray-500 text-xs">{activity.time}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HomeScreen;
