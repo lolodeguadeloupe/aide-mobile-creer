@@ -1,47 +1,48 @@
 
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, Building, Car } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import CarRentalsList from './CarRentalsList';
-import CarRentalForm from './CarRentalForm';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import CarRentalCompaniesList from './CarRentalCompaniesList';
+import CarRentalCompanyForm from './CarRentalCompanyForm';
 
 const CarRentalsScreen = () => {
   const navigate = useNavigate();
-  const [showForm, setShowForm] = useState(false);
-  const [editingCarRental, setEditingCarRental] = useState(null);
+  const [showCompanyForm, setShowCompanyForm] = useState(false);
+  const [editingCompany, setEditingCompany] = useState(null);
 
-  const handleEditCarRental = (carRental: any) => {
-    setEditingCarRental(carRental);
-    setShowForm(true);
+  const handleEditCompany = (company: any) => {
+    setEditingCompany(company);
+    setShowCompanyForm(true);
   };
 
-  const handleCloseForm = () => {
-    setShowForm(false);
-    setEditingCarRental(null);
+  const handleCloseCompanyForm = () => {
+    setShowCompanyForm(false);
+    setEditingCompany(null);
   };
 
-  const handleNewCarRental = () => {
-    setEditingCarRental(null);
-    setShowForm(true);
+  const handleNewCompany = () => {
+    setEditingCompany(null);
+    setShowCompanyForm(true);
   };
 
-  if (showForm) {
+  if (showCompanyForm) {
     return (
       <div className="min-h-screen bg-gray-50 p-4">
         <div className="mb-4">
           <Button
             variant="ghost"
-            onClick={handleCloseForm}
+            onClick={handleCloseCompanyForm}
             className="mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour à la liste
           </Button>
         </div>
-        <CarRentalForm
-          carRental={editingCarRental}
-          onClose={handleCloseForm}
+        <CarRentalCompanyForm
+          company={editingCompany}
+          onClose={handleCloseCompanyForm}
         />
       </div>
     );
@@ -63,16 +64,41 @@ const CarRentalsScreen = () => {
             </Button>
             <h1 className="text-2xl font-bold text-gray-900">Gestion des Locations de Voitures</h1>
           </div>
-          <Button onClick={handleNewCarRental}>
-            <Plus className="h-4 w-4 mr-2" />
-            Nouvelle voiture
-          </Button>
         </div>
       </div>
 
       {/* Content */}
       <div className="p-4">
-        <CarRentalsList onEditCarRental={handleEditCarRental} />
+        <Tabs defaultValue="companies" className="w-full">
+          <div className="flex justify-between items-center mb-4">
+            <TabsList className="grid w-full max-w-md grid-cols-2">
+              <TabsTrigger value="companies" className="flex items-center gap-2">
+                <Building className="h-4 w-4" />
+                Compagnies
+              </TabsTrigger>
+              <TabsTrigger value="models" className="flex items-center gap-2">
+                <Car className="h-4 w-4" />
+                Modèles
+              </TabsTrigger>
+            </TabsList>
+            
+            <Button onClick={handleNewCompany}>
+              <Plus className="h-4 w-4 mr-2" />
+              Nouvelle compagnie
+            </Button>
+          </div>
+
+          <TabsContent value="companies">
+            <CarRentalCompaniesList onEditCompany={handleEditCompany} />
+          </TabsContent>
+          
+          <TabsContent value="models">
+            <div className="text-center p-8">
+              <Car className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+              <p className="text-gray-500">Gestion des modèles de voitures à venir...</p>
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
