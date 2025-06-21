@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { User, Mail, Calendar, Edit3, Save, X } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,7 +10,6 @@ interface Profile {
   email: string;
   first_name: string | null;
   last_name: string | null;
-  avatar_url: string | null;
   created_at: string;
 }
 
