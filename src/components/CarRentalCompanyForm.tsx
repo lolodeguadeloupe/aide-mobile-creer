@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCarRentalCompanies } from '@/hooks/useCarRentalCompanies';
+import { X, Plus } from 'lucide-react';
 
 interface CarRentalCompanyFormProps {
   company?: any;
@@ -22,6 +23,7 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
     rating: 0,
     image: '',
     icon_name: 'car',
+    gallery_images: [] as string[],
   });
 
   const { createCompany, updateCompany, isCreating, isUpdating } = useCarRentalCompanies();
@@ -37,6 +39,7 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
         rating: company.rating || 0,
         image: company.image || '',
         icon_name: company.icon_name || 'car',
+        gallery_images: company.gallery_images || [],
       });
     }
   }, [company]);
@@ -45,10 +48,15 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
     e.preventDefault();
     
     try {
+      const submissionData = {
+        ...formData,
+        gallery_images: JSON.stringify(formData.gallery_images),
+      };
+
       if (company) {
-        await updateCompany({ id: company.id, ...formData });
+        await updateCompany({ id: company.id, ...submissionData });
       } else {
-        await createCompany(formData);
+        await createCompany(submissionData);
       }
       onClose();
     } catch (error) {
@@ -60,6 +68,27 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
     setFormData(prev => ({
       ...prev,
       [field]: value
+    }));
+  };
+
+  const addGalleryImage = () => {
+    setFormData(prev => ({
+      ...prev,
+      gallery_images: [...prev.gallery_images, '']
+    }));
+  };
+
+  const updateGalleryImage = (index: number, url: string) => {
+    setFormData(prev => ({
+      ...prev,
+      gallery_images: prev.gallery_images.map((img, i) => i === index ? url : img)
+    }));
+  };
+
+  const removeGalleryImage = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      gallery_images: prev.gallery_images.filter((_, i) => i !== index)
     }));
   };
 
@@ -145,7 +174,7 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
               />
             </div>
             <div>
-              <Label htmlFor="image">URL de l'image</Label>
+              <Label htmlFor="image">URL de l'image principale</Label>
               <Input
                 id="image"
                 type="url"
@@ -154,6 +183,48 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
                 placeholder="https://..."
               />
             </div>
+          </div>
+
+          {/* Gallery Images Section */}
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <Label>Images de galerie</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addGalleryImage}
+                className="flex items-center gap-2"
+              >
+                <Plus className="h-4 w-4" />
+                Ajouter une image
+              </Button>
+            </div>
+            
+            {formData.gallery_images.length > 0 && (
+              <div className="space-y-2">
+                {formData.gallery_images.map((imageUrl, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <Input
+                      type="url"
+                      value={imageUrl}
+                      onChange={(e) => updateGalleryImage(index, e.target.value)}
+                      placeholder={`URL de l'image ${index + 1}`}
+                      className="flex-1"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => removeGalleryImage(index)}
+                      className="flex-shrink-0"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex justify-end space-x-2 pt-4">

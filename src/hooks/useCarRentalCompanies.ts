@@ -17,16 +17,29 @@ export const useCarRentalCompanies = () => {
         .order('name');
       
       if (error) throw error;
-      return data;
+      
+      // Parse gallery_images JSON for each company
+      return data?.map(company => ({
+        ...company,
+        gallery_images: company.gallery_images || []
+      }));
     },
   });
 
   // Create car rental company
   const createCompany = useMutation({
     mutationFn: async (company: any) => {
+      // Ensure gallery_images is properly formatted
+      const companyData = {
+        ...company,
+        gallery_images: typeof company.gallery_images === 'string' 
+          ? JSON.parse(company.gallery_images) 
+          : company.gallery_images || []
+      };
+
       const { data, error } = await supabase
         .from('car_rental_companies')
-        .insert([company])
+        .insert([companyData])
         .select();
       
       if (error) throw error;
@@ -51,9 +64,17 @@ export const useCarRentalCompanies = () => {
 
   const updateCompany = useMutation({
     mutationFn: async ({ id, ...company }: any) => {
+      // Ensure gallery_images is properly formatted
+      const companyData = {
+        ...company,
+        gallery_images: typeof company.gallery_images === 'string' 
+          ? JSON.parse(company.gallery_images) 
+          : company.gallery_images || []
+      };
+
       const { data, error } = await supabase
         .from('car_rental_companies')
-        .update(company)
+        .update(companyData)
         .eq('id', id)
         .select();
       
