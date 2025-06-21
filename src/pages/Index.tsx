@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,14 +9,21 @@ import HomeScreen from '@/components/HomeScreen';
 const Index = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [showAuth, setShowAuth] = useState(false);
 
-  if (!user) {
-    return <AuthScreen />;
+  if (!user && !showAuth) {
+    return (
+      <HomeScreen onShowAuth={() => setShowAuth(true)} />
+    );
+  }
+
+  if (!user && showAuth) {
+    return <AuthScreen onBack={() => setShowAuth(false)} />;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HomeScreen />
+      <HomeScreen onShowAuth={() => setShowAuth(true)} />
       
       {/* Navigation rapide */}
       <div className="p-4">
