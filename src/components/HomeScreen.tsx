@@ -1,6 +1,9 @@
 
-import { Bell, Plus, TrendingUp, Star, Users, LogIn } from 'lucide-react';
+import { Bell, Plus, TrendingUp, Star, Users, LogIn, Calendar, MapPin, Music, Utensils, Car, GamepadIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 
 interface HomeScreenProps {
   onShowAuth: () => void;
@@ -8,6 +11,8 @@ interface HomeScreenProps {
 
 const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
   const { user } = useAuth();
+  const navigate = useNavigate();
+  const [showQuickMenu, setShowQuickMenu] = useState(false);
 
   const stats = [
     { label: 'Utilisateurs actifs', value: '2.4K', icon: Users, color: 'bg-blue-500' },
@@ -20,6 +25,33 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
     { title: 'Mise à jour déployée', time: 'Il y a 1h', avatar: '🚀' },
     { title: 'Feedback reçu', time: 'Il y a 3h', avatar: '💬' },
   ];
+
+  const quickActions = [
+    { label: 'Hébergement', icon: MapPin, route: '/accommodations' },
+    { label: 'Restaurant', icon: Utensils, route: '/restaurants' },
+    { label: 'Concert', icon: Music, route: '/concerts' },
+    { label: 'Soirée', icon: Calendar, route: '/nightlife' },
+    { label: 'Loisir', icon: GamepadIcon, route: '/loisirs' },
+    { label: 'Activité', icon: Star, route: '/activities' },
+    { label: 'Location auto', icon: Car, route: '/car-rentals' },
+  ];
+
+  const handleQuickAction = (route: string) => {
+    if (!user) {
+      onShowAuth();
+      return;
+    }
+    navigate(route);
+  };
+
+  const handleAnalytics = () => {
+    if (!user) {
+      onShowAuth();
+      return;
+    }
+    // For now, just show an alert - could be expanded to a full analytics page
+    alert('Fonctionnalité Analytics à venir !');
+  };
 
   return (
     <div className="flex-1 bg-gradient-to-br from-blue-50 to-purple-50 p-4 pb-24">
@@ -75,16 +107,55 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 mb-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-3">Actions rapides</h3>
         <div className="grid grid-cols-2 gap-3">
-          <button className="flex items-center justify-center p-4 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors">
-            <Plus size={20} className="text-blue-600 mr-2" />
-            <span className="text-blue-600 font-medium">Nouveau</span>
-          </button>
-          <button className="flex items-center justify-center p-4 bg-purple-50 rounded-xl border border-purple-100 hover:bg-purple-100 transition-colors">
+          <div className="relative">
+            <button 
+              onClick={() => setShowQuickMenu(!showQuickMenu)}
+              className="flex items-center justify-center p-4 bg-blue-50 rounded-xl border border-blue-100 hover:bg-blue-100 transition-colors w-full"
+            >
+              <Plus size={20} className="text-blue-600 mr-2" />
+              <span className="text-blue-600 font-medium">Nouveau</span>
+            </button>
+            
+            {/* Quick Menu Dropdown */}
+            {showQuickMenu && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-xl shadow-lg border border-gray-200 z-10 max-h-64 overflow-y-auto">
+                {quickActions.map((action, index) => {
+                  const Icon = action.icon;
+                  return (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        setShowQuickMenu(false);
+                        handleQuickAction(action.route);
+                      }}
+                      className="flex items-center w-full p-3 hover:bg-gray-50 transition-colors first:rounded-t-xl last:rounded-b-xl"
+                    >
+                      <Icon size={18} className="text-gray-600 mr-3" />
+                      <span className="text-gray-700 font-medium">{action.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          
+          <button 
+            onClick={handleAnalytics}
+            className="flex items-center justify-center p-4 bg-purple-50 rounded-xl border border-purple-100 hover:bg-purple-100 transition-colors"
+          >
             <TrendingUp size={20} className="text-purple-600 mr-2" />
             <span className="text-purple-600 font-medium">Analytics</span>
           </button>
         </div>
       </div>
+
+      {/* Click outside to close menu */}
+      {showQuickMenu && (
+        <div 
+          className="fixed inset-0 z-5" 
+          onClick={() => setShowQuickMenu(false)}
+        />
+      )}
 
       {/* Recent Activity */}
       <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
