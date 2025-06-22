@@ -1,6 +1,14 @@
 # Étape de build
 FROM node:22-alpine AS builder
 
+# Déclarer les arguments de build pour les secrets Supabase
+ARG VITE_SUPABASE_URL
+ARG VITE_SUPABASE_PUBLISHABLE_KEY
+
+# Les rendre disponibles comme variables d'environnement pour le build Vite
+ENV VITE_SUPABASE_URL=$VITE_SUPABASE_URL
+ENV VITE_SUPABASE_PUBLISHABLE_KEY=$VITE_SUPABASE_PUBLISHABLE_KEY
+
 WORKDIR /app
 
 # Copier les fichiers de configuration
