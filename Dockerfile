@@ -1,16 +1,12 @@
-# Utiliser Node.js 22
-FROM node:22-alpine
+# Étape de build
+FROM node:22-alpine AS builder
 
-# Installer curl pour le healthcheck
-RUN apk add --no-cache curl
-
-# Définir le répertoire de travail
 WORKDIR /app
 
-# Copier les fichiers de dépendances
+# Copier les fichiers de configuration
 COPY package*.json ./
 
-# Installer les dépendances
+# Installer TOUTES les dépendances (y compris devDependencies pour le build)
 RUN npm ci
 
 # Copier le code source
@@ -19,12 +15,18 @@ COPY . .
 # Construire l'application
 RUN npm run build
 
-# Exposer le port
-EXPOSE 3000
+# Étape de production
+FROM nginx:alpine
 
-# Healthcheck pour vérifier que l'app fonctionne
-HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 \
-  CMD curl -f http://localhost:3000 || exit 1
+# Supprimer les fichiers par défaut de Nginx
+RUN rm -rf /usr/share/nginx/html/*
 
-# Commande de démarrage
-CMD ["npm", "start"]
+# Copier les fichiers buildés depuis l'étape précédente
+COPY --from=builder /app/dist/ /usr/share/nginx/html/
+
+# Copier la configuration Nginx personnalisée
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
