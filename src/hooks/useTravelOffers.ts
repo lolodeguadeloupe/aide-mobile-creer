@@ -28,7 +28,7 @@ export const useTravelOffers = () => {
         .from('travel_offers')
         .insert([travelOfferData])
         .select()
-        .single();
+        .maybeSingle();
       
       if (error) throw error;
       return data;
@@ -46,14 +46,26 @@ export const useTravelOffers = () => {
   // Update travel offer
   const updateTravelOfferMutation = useMutation({
     mutationFn: async ({ id, ...travelOfferData }: any) => {
+      console.log('Updating travel offer with ID:', id);
+      console.log('Travel offer data:', travelOfferData);
+      
       const { data, error } = await supabase
         .from('travel_offers')
         .update(travelOfferData)
         .eq('id', id)
         .select()
-        .single();
+        .maybeSingle();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase update error:', error);
+        throw error;
+      }
+      
+      if (!data) {
+        console.error('No travel offer found with ID:', id);
+        throw new Error('Offre de voyage non trouvée');
+      }
+      
       return data;
     },
     onSuccess: () => {
