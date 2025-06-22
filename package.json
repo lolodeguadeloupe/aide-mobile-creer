@@ -9,8 +9,7 @@
     "build:prod": "VITE_SUPABASE_URL=$VITE_SUPABASE_URL VITE_SUPABASE_PUBLISHABLE_KEY=$VITE_SUPABASE_PUBLISHABLE_KEY vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "preinstall": "npx check-node-version --node 22"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.0",
