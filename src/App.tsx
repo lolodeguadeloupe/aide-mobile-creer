@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Routes, Route } from "react-router-dom";
@@ -10,6 +11,7 @@ import NightlifeScreen from "./components/NightlifeScreen";
 import LoisirsScreen from "./components/LoisirsScreen";
 import ActivitiesScreen from "./components/ActivitiesScreen";
 import CarRentalsScreen from "./components/CarRentalsScreen";
+import TravelOffersScreen from "./components/TravelOffersScreen";
 import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 const App = () => (
@@ -25,6 +27,7 @@ const App = () => (
       <Route path="/loisirs" element={<LoisirsScreen />} />
       <Route path="/activities" element={<ActivitiesScreen />} />
       <Route path="/car-rentals" element={<CarRentalsScreen />} />
+      <Route path="/travel-offers" element={<TravelOffersScreen />} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
