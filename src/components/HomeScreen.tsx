@@ -1,9 +1,9 @@
-
 import { Bell, Plus, TrendingUp, Star, Users, LogIn, Calendar, MapPin, Music, Utensils, Car, GamepadIcon } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { usePWA } from '@/hooks/usePWA';
 
 interface HomeScreenProps {
   onShowAuth: () => void;
@@ -13,6 +13,7 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [showQuickMenu, setShowQuickMenu] = useState(false);
+  const { isPWA, isStandalone } = usePWA();
 
   const stats = [
     { label: 'Utilisateurs actifs', value: '2.4K', icon: Users, color: 'bg-blue-500' },
@@ -61,7 +62,14 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
           <h1 className="text-2xl font-bold text-gray-900">
             {user ? `Bonjour ${user.email?.split('@')[0]} !` : 'Bonjour !'}
           </h1>
-          <p className="text-gray-600">Bienvenue dans votre app</p>
+          <div className="flex items-center gap-2">
+            <p className="text-gray-600">Bienvenue dans votre app</p>
+            {isPWA && (
+              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+                PWA
+              </span>
+            )}
+          </div>
         </div>
         <div className="flex items-center gap-2">
           {!user && (

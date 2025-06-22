@@ -1,0 +1,29 @@
+
+{
+  "name": "Aide Mobile Créer",
+  "short_name": "AideMobile",
+  "description": "Application mobile pour la gestion d'hébergements, restaurants, concerts et plus",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3b82f6",
+  "orientation": "portrait",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/lovable-uploads/f5ace6c4-51b1-496b-a1ba-7ca293c116e5.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/f5ace6c4-51b1-496b-a1ba-7ca293c116e5.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "travel"],
+  "lang": "fr",
+  "dir": "ltr"
+}

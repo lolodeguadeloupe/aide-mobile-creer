@@ -14,6 +14,7 @@ import NightlifeScreen from "./components/NightlifeScreen";
 import LoisirsScreen from "./components/LoisirsScreen";
 import ActivitiesScreen from "./components/ActivitiesScreen";
 import CarRentalsScreen from "./components/CarRentalsScreen";
+import PWAInstallPrompt from "./components/PWAInstallPrompt";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <PWAInstallPrompt />
         </BrowserRouter>
       </TooltipProvider>
     </AuthProvider>
