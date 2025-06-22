@@ -20,8 +20,8 @@ RUN npm ci
 # Copier le code source
 COPY . .
 
-# Construire l'application
-RUN npm run build
+# Construire l'application en utilisant le script de production
+RUN npm run build:prod
 
 # Étape de production
 FROM nginx:alpine

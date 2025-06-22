@@ -2,12 +2,8 @@
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
-// These global variables are defined in vite.config.ts
-declare const __SUPABASE_URL__: string;
-declare const __SUPABASE_KEY__: string;
-
-const SUPABASE_URL = __SUPABASE_URL__;
-const SUPABASE_PUBLISHABLE_KEY = __SUPABASE_KEY__;
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
   throw new Error("Missing Supabase environment variables");
