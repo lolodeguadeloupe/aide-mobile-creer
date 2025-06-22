@@ -1,3 +1,4 @@
+
 # Étape de build
 FROM node:22-alpine AS builder
 
@@ -13,15 +14,21 @@ WORKDIR /app
 
 # Copier les fichiers de configuration
 COPY package*.json ./
+COPY bun.lockb ./
+COPY pnpm-lock.yaml ./
 
-# Installer TOUTES les dépendances (y compris devDependencies pour le build)
-RUN npm ci
+# Nettoyer le cache npm et supprimer node_modules s'ils existent
+RUN rm -rf node_modules package-lock.json
+
+# Installer npm et les dépendances en utilisant la dernière version
+RUN npm install -g npm@latest
+RUN npm install
 
 # Copier le code source
 COPY . .
 
-# Construire l'application en utilisant le script de production
-RUN npm run build:prod
+# Construire l'application
+RUN npm run build
 
 # Étape de production
 FROM nginx:alpine

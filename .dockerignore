@@ -37,7 +37,6 @@ Thumbs.db
 README.md
 
 # Docker
-Dockerfile
 .dockerignore
 docker-compose.yml
 
@@ -89,3 +88,7 @@ jspm_packages/
 # Temporary folders
 tmp/
 temp/
+
+# Lock files (on évite les conflits)
+package-lock.json
+yarn.lock
