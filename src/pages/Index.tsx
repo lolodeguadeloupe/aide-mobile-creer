@@ -80,6 +80,13 @@ const Index = () => {
             >
               Gérer les locations de voitures
             </Button>
+            <Button
+              onClick={() => navigate('/travel-offers')}
+              variant="outline"
+              className="w-full justify-start"
+            >
+              Gérer les voyages
+            </Button>
           </div>
         </div>
       </div>
