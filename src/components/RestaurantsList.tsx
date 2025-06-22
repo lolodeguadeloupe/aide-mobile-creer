@@ -8,12 +8,16 @@ import { useToast } from '@/hooks/use-toast';
 
 interface RestaurantsListProps {
   onEditRestaurant: (restaurant: any) => void;
+  restaurants?: any[];
 }
 
-const RestaurantsList: React.FC<RestaurantsListProps> = ({ onEditRestaurant }) => {
-  const { data: restaurants, isLoading, error } = useRestaurants();
+const RestaurantsList: React.FC<RestaurantsListProps> = ({ onEditRestaurant, restaurants: propRestaurants }) => {
+  const { data: fetchedRestaurants, isLoading, error } = useRestaurants();
   const { deleteRestaurant } = useRestaurants();
   const { toast } = useToast();
+
+  // Use prop restaurants if provided, otherwise use fetched restaurants
+  const restaurants = propRestaurants || fetchedRestaurants;
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce restaurant ?')) {
@@ -33,7 +37,7 @@ const RestaurantsList: React.FC<RestaurantsListProps> = ({ onEditRestaurant }) =
     }
   };
 
-  if (isLoading) {
+  if (isLoading && !propRestaurants) {
     return (
       <div className="flex justify-center items-center py-8">
         <div className="text-gray-500">Chargement...</div>
@@ -41,7 +45,7 @@ const RestaurantsList: React.FC<RestaurantsListProps> = ({ onEditRestaurant }) =
     );
   }
 
-  if (error) {
+  if (error && !propRestaurants) {
     return (
       <div className="text-center py-8">
         <div className="text-red-500">Erreur lors du chargement des restaurants</div>
