@@ -1,16 +1,36 @@
 
-import React from 'react';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Plus, Edit, Trash2, ArrowLeft, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { useNavigate } from 'react-router-dom';
 import { useAccommodations, useDeleteAccommodation, Accommodation } from '@/hooks/useAccommodations';
-import { useState } from 'react';
 import AccommodationForm from './AccommodationForm';
 
 const AccommodationsScreen: React.FC = () => {
+  const navigate = useNavigate();
   const { data: accommodations, isLoading, error } = useAccommodations();
   const deleteAccommodation = useDeleteAccommodation();
   const [showForm, setShowForm] = useState(false);
   const [editingAccommodation, setEditingAccommodation] = useState<Accommodation | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Filter accommodations based on search term
+  const filteredAccommodations = useMemo(() => {
+    if (!accommodations) return [];
+    
+    if (!searchTerm.trim()) {
+      return accommodations;
+    }
+
+    const searchLower = searchTerm.toLowerCase();
+    return accommodations.filter(accommodation => 
+      accommodation.name?.toLowerCase().includes(searchLower) ||
+      accommodation.type?.toLowerCase().includes(searchLower) ||
+      accommodation.location?.toLowerCase().includes(searchLower) ||
+      accommodation.description?.toLowerCase().includes(searchLower)
+    );
+  }, [accommodations, searchTerm]);
 
   const handleEdit = (accommodation: Accommodation) => {
     setEditingAccommodation(accommodation);
@@ -61,8 +81,18 @@ const AccommodationsScreen: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200 px-4 py-4">
-        <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold text-gray-900">Hébergements</h1>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => navigate('/')}
+              className="mr-3"
+            >
+              <ArrowLeft size={20} />
+            </Button>
+            <h1 className="text-2xl font-bold text-gray-900">Hébergements</h1>
+          </div>
           <Button
             onClick={() => setShowForm(true)}
             className="bg-blue-600 hover:bg-blue-700"
@@ -73,22 +103,40 @@ const AccommodationsScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* Content */}
+      {/* Search Bar */}
       <div className="p-4">
-        {accommodations?.length === 0 ? (
+        <div className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+          <Input
+            type="text"
+            placeholder="Rechercher par nom, type, lieu ou description..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="pl-10"
+          />
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="px-4 pb-4">
+        {filteredAccommodations?.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-gray-500 text-lg mb-4">Aucun hébergement trouvé</div>
-            <Button
-              onClick={() => setShowForm(true)}
-              className="bg-blue-600 hover:bg-blue-700"
-            >
-              <Plus size={20} className="mr-2" />
-              Créer le premier hébergement
-            </Button>
+            <div className="text-gray-500 text-lg mb-4">
+              {searchTerm ? 'Aucun hébergement trouvé pour cette recherche' : 'Aucun hébergement trouvé'}
+            </div>
+            {!searchTerm && (
+              <Button
+                onClick={() => setShowForm(true)}
+                className="bg-blue-600 hover:bg-blue-700"
+              >
+                <Plus size={20} className="mr-2" />
+                Créer le premier hébergement
+              </Button>
+            )}
           </div>
         ) : (
           <div className="space-y-4">
-            {accommodations?.map((accommodation) => (
+            {filteredAccommodations?.map((accommodation) => (
               <div
                 key={accommodation.id}
                 className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
