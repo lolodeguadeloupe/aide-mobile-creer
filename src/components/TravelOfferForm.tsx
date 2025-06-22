@@ -50,8 +50,12 @@ const TravelOfferForm: React.FC<TravelOfferFormProps> = ({ travelOffer, onClose 
         exclusions: travelOffer.exclusions || [],
         is_active: travelOffer.is_active !== false
       });
-      setMainImage(travelOffer.image || '');
+      // Utiliser l'image principale ou une image par défaut
+      setMainImage(travelOffer.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop');
       setGalleryImages(travelOffer.gallery_images || []);
+    } else {
+      // Pour les nouvelles offres, définir une image par défaut
+      setMainImage('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop');
     }
   }, [travelOffer]);
 

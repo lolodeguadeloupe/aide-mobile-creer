@@ -102,10 +102,10 @@ const TravelOffersList: React.FC<TravelOffersListProps> = ({ onEditTravelOffer, 
           <Card key={travelOffer.id} className="overflow-hidden">
             <CardContent className="p-0">
               <div className="flex">
-                {/* Image */}
+                {/* Image principale */}
                 <div className="w-24 h-24 flex-shrink-0">
                   <img
-                    src={travelOffer.image || '/placeholder.svg'}
+                    src={travelOffer.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop'}
                     alt={travelOffer.title}
                     className="w-full h-full object-cover"
                   />
