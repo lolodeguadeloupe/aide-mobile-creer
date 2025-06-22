@@ -10,13 +10,18 @@ export const useTravelOffers = () => {
   const { data, isLoading, error } = useQuery({
     queryKey: ['travel-offers'],
     queryFn: async () => {
+      console.log('Fetching travel offers...');
       const { data, error } = await supabase
         .from('travel_offers')
         .select('*')
         .eq('is_active', true)
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error fetching travel offers:', error);
+        throw error;
+      }
+      console.log('Fetched travel offers:', data);
       return data;
     },
   });
@@ -24,13 +29,18 @@ export const useTravelOffers = () => {
   // Create travel offer
   const createTravelOfferMutation = useMutation({
     mutationFn: async (travelOfferData: any) => {
+      console.log('Creating travel offer:', travelOfferData);
       const { data, error } = await supabase
         .from('travel_offers')
         .insert([travelOfferData])
         .select()
         .maybeSingle();
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating travel offer:', error);
+        throw error;
+      }
+      console.log('Created travel offer:', data);
       return data;
     },
     onSuccess: () => {
@@ -49,6 +59,25 @@ export const useTravelOffers = () => {
       console.log('Updating travel offer with ID:', id);
       console.log('Travel offer data:', travelOfferData);
       
+      // First check if the travel offer exists
+      const { data: existingOffer, error: checkError } = await supabase
+        .from('travel_offers')
+        .select('id')
+        .eq('id', id)
+        .eq('is_active', true)
+        .maybeSingle();
+      
+      if (checkError) {
+        console.error('Error checking travel offer existence:', checkError);
+        throw checkError;
+      }
+      
+      if (!existingOffer) {
+        console.error('Travel offer not found with ID:', id);
+        throw new Error(`Aucune offre de voyage active trouvée avec l'ID ${id}`);
+      }
+      
+      // Proceed with update
       const { data, error } = await supabase
         .from('travel_offers')
         .update(travelOfferData)
@@ -61,11 +90,7 @@ export const useTravelOffers = () => {
         throw error;
       }
       
-      if (!data) {
-        console.error('No travel offer found with ID:', id);
-        throw new Error('Offre de voyage non trouvée');
-      }
-      
+      console.log('Updated travel offer:', data);
       return data;
     },
     onSuccess: () => {
@@ -81,12 +106,37 @@ export const useTravelOffers = () => {
   // Delete travel offer
   const deleteTravelOfferMutation = useMutation({
     mutationFn: async (id: number) => {
+      console.log('Deleting travel offer with ID:', id);
+      
+      // Check if the travel offer exists first
+      const { data: existingOffer, error: checkError } = await supabase
+        .from('travel_offers')
+        .select('id')
+        .eq('id', id)
+        .eq('is_active', true)
+        .maybeSingle();
+      
+      if (checkError) {
+        console.error('Error checking travel offer existence:', checkError);
+        throw checkError;
+      }
+      
+      if (!existingOffer) {
+        console.error('Travel offer not found with ID:', id);
+        throw new Error(`Aucune offre de voyage active trouvée avec l'ID ${id}`);
+      }
+      
       const { error } = await supabase
         .from('travel_offers')
         .update({ is_active: false })
         .eq('id', id);
       
-      if (error) throw error;
+      if (error) {
+        console.error('Error deleting travel offer:', error);
+        throw error;
+      }
+      
+      console.log('Deleted travel offer with ID:', id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
