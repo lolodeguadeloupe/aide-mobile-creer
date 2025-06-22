@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -8,12 +7,16 @@ import { useToast } from '@/hooks/use-toast';
 
 interface ConcertsListProps {
   onEditConcert: (concert: any) => void;
+  concerts?: any[];
 }
 
-const ConcertsList: React.FC<ConcertsListProps> = ({ onEditConcert }) => {
-  const { data: concerts, isLoading, error } = useConcerts();
+const ConcertsList: React.FC<ConcertsListProps> = ({ onEditConcert, concerts: propConcerts }) => {
+  const { data: fetchedConcerts, isLoading, error } = useConcerts();
   const { deleteConcert } = useConcerts();
   const { toast } = useToast();
+
+  // Use prop concerts if provided, otherwise use fetched concerts
+  const concerts = propConcerts || fetchedConcerts;
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce concert ?')) {
@@ -33,7 +36,7 @@ const ConcertsList: React.FC<ConcertsListProps> = ({ onEditConcert }) => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading && !propConcerts) {
     return (
       <div className="flex justify-center items-center py-8">
         <div className="text-gray-500">Chargement...</div>
@@ -41,7 +44,7 @@ const ConcertsList: React.FC<ConcertsListProps> = ({ onEditConcert }) => {
     );
   }
 
-  if (error) {
+  if (error && !propConcerts) {
     return (
       <div className="text-center py-8">
         <div className="text-red-500">Erreur lors du chargement des concerts</div>
