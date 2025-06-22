@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import AuthScreen from '@/components/AuthScreen';
 import HomeScreen from '@/components/HomeScreen';
+import SignOutButton from '@/components/SignOutButton';
 
 const Index = () => {
   const { user } = useAuth();
@@ -81,6 +82,11 @@ const Index = () => {
             </Button>
           </div>
         </div>
+      </div>
+
+      {/* Logout Button */}
+      <div className="p-4">
+        <SignOutButton />
       </div>
     </div>
   );
