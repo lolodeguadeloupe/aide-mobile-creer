@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, Eye } from 'lucide-react';
+import { Upload, Eye, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface MainImageUploadProps {
@@ -16,8 +16,9 @@ const MainImageUpload: React.FC<MainImageUploadProps> = ({
   onPreviewImage
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
 
-  const handleMainImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
@@ -58,7 +59,7 @@ const MainImageUpload: React.FC<MainImageUploadProps> = ({
             </Button>
           </div>
         )}
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button
             type="button"
             variant="outline"
@@ -66,13 +67,30 @@ const MainImageUpload: React.FC<MainImageUploadProps> = ({
             className="flex items-center gap-2"
           >
             <Upload size={16} />
-            {mainImage ? 'Changer l\'image' : 'Télécharger une image'}
+            {mainImage ? 'Changer l\'image' : 'Télécharger'}
+          </Button>
+          <Button
+            type="button"
+            variant="outline"
+            onClick={() => cameraInputRef.current?.click()}
+            className="flex items-center gap-2"
+          >
+            <Camera size={16} />
+            Prendre une photo
           </Button>
           <input
             ref={fileInputRef}
             type="file"
             accept="image/*"
-            onChange={handleMainImageUpload}
+            onChange={handleImageUpload}
+            className="hidden"
+          />
+          <input
+            ref={cameraInputRef}
+            type="file"
+            accept="image/*"
+            capture="environment"
+            onChange={handleImageUpload}
             className="hidden"
           />
         </div>

@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Upload, X, Eye } from 'lucide-react';
+import { Upload, X, Eye, Camera } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface GalleryImageUploadProps {
@@ -16,8 +16,9 @@ const GalleryImageUpload: React.FC<GalleryImageUploadProps> = ({
   onPreviewImage
 }) => {
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
+  const galleryCameraInputRef = useRef<HTMLInputElement>(null);
 
-  const handleGalleryImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || []);
     
     if (files.length + galleryImages.length > 10) {
@@ -87,24 +88,44 @@ const GalleryImageUpload: React.FC<GalleryImageUploadProps> = ({
         </div>
       )}
 
-      <Button
-        type="button"
-        variant="outline"
-        onClick={() => galleryFileInputRef.current?.click()}
-        disabled={galleryImages.length >= 10}
-        className="flex items-center gap-2"
-      >
-        <Upload size={16} />
-        Ajouter des images ({galleryImages.length}/10)
-      </Button>
-      <input
-        ref={galleryFileInputRef}
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleGalleryImageUpload}
-        className="hidden"
-      />
+      <div className="flex gap-2 flex-wrap">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => galleryFileInputRef.current?.click()}
+          disabled={galleryImages.length >= 10}
+          className="flex items-center gap-2"
+        >
+          <Upload size={16} />
+          Ajouter des images ({galleryImages.length}/10)
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => galleryCameraInputRef.current?.click()}
+          disabled={galleryImages.length >= 10}
+          className="flex items-center gap-2"
+        >
+          <Camera size={16} />
+          Prendre une photo
+        </Button>
+        <input
+          ref={galleryFileInputRef}
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImageUpload}
+          className="hidden"
+        />
+        <input
+          ref={galleryCameraInputRef}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          onChange={handleImageUpload}
+          className="hidden"
+        />
+      </div>
     </div>
   );
 };
