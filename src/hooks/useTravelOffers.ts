@@ -30,11 +30,18 @@ export const useTravelOffers = () => {
   const createTravelOfferMutation = useMutation({
     mutationFn: async (travelOfferData: any) => {
       console.log('Creating travel offer:', travelOfferData);
+      
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Vous devez être connecté pour créer une offre de voyage');
+      }
+      
       const { data, error } = await supabase
         .from('travel_offers')
         .insert([travelOfferData])
         .select()
-        .maybeSingle();
+        .single();
       
       if (error) {
         console.error('Error creating travel offer:', error);
@@ -47,9 +54,10 @@ export const useTravelOffers = () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
       toast.success('Offre de voyage créée avec succès');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Erreur lors de la création de l\'offre de voyage:', error);
-      toast.error('Erreur lors de la création de l\'offre de voyage');
+      const errorMessage = error.message || 'Erreur lors de la création de l\'offre de voyage';
+      toast.error(errorMessage);
     },
   });
 
@@ -59,31 +67,18 @@ export const useTravelOffers = () => {
       console.log('Updating travel offer with ID:', id);
       console.log('Travel offer data:', travelOfferData);
       
-      // First check if the travel offer exists
-      const { data: existingOffer, error: checkError } = await supabase
-        .from('travel_offers')
-        .select('id')
-        .eq('id', id)
-        .eq('is_active', true)
-        .maybeSingle();
-      
-      if (checkError) {
-        console.error('Error checking travel offer existence:', checkError);
-        throw checkError;
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Vous devez être connecté pour modifier une offre de voyage');
       }
       
-      if (!existingOffer) {
-        console.error('Travel offer not found with ID:', id);
-        throw new Error(`Aucune offre de voyage active trouvée avec l'ID ${id}`);
-      }
-      
-      // Proceed with update
       const { data, error } = await supabase
         .from('travel_offers')
         .update(travelOfferData)
         .eq('id', id)
         .select()
-        .maybeSingle();
+        .single();
       
       if (error) {
         console.error('Supabase update error:', error);
@@ -97,9 +92,10 @@ export const useTravelOffers = () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
       toast.success('Offre de voyage modifiée avec succès');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Erreur lors de la modification de l\'offre de voyage:', error);
-      toast.error('Erreur lors de la modification de l\'offre de voyage');
+      const errorMessage = error.message || 'Erreur lors de la modification de l\'offre de voyage';
+      toast.error(errorMessage);
     },
   });
 
@@ -108,22 +104,10 @@ export const useTravelOffers = () => {
     mutationFn: async (id: number) => {
       console.log('Deleting travel offer with ID:', id);
       
-      // Check if the travel offer exists first
-      const { data: existingOffer, error: checkError } = await supabase
-        .from('travel_offers')
-        .select('id')
-        .eq('id', id)
-        .eq('is_active', true)
-        .maybeSingle();
-      
-      if (checkError) {
-        console.error('Error checking travel offer existence:', checkError);
-        throw checkError;
-      }
-      
-      if (!existingOffer) {
-        console.error('Travel offer not found with ID:', id);
-        throw new Error(`Aucune offre de voyage active trouvée avec l'ID ${id}`);
+      // Check if user is authenticated
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        throw new Error('Vous devez être connecté pour supprimer une offre de voyage');
       }
       
       const { error } = await supabase
@@ -142,9 +126,10 @@ export const useTravelOffers = () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
       toast.success('Offre de voyage supprimée avec succès');
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error('Erreur lors de la suppression de l\'offre de voyage:', error);
-      toast.error('Erreur lors de la suppression de l\'offre de voyage');
+      const errorMessage = error.message || 'Erreur lors de la suppression de l\'offre de voyage';
+      toast.error(errorMessage);
     },
   });
 
