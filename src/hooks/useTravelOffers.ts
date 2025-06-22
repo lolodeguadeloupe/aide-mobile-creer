@@ -99,7 +99,7 @@ export const useTravelOffers = () => {
     },
   });
 
-  // Delete travel offer
+  // Delete travel offer - Updated to use actual DELETE for admins
   const deleteTravelOfferMutation = useMutation({
     mutationFn: async (id: number) => {
       console.log('Deleting travel offer with ID:', id);
@@ -110,17 +110,40 @@ export const useTravelOffers = () => {
         throw new Error('Vous devez être connecté pour supprimer une offre de voyage');
       }
       
-      const { error } = await supabase
-        .from('travel_offers')
-        .update({ is_active: false })
-        .eq('id', id);
+      // Check if user is admin to determine delete method
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
       
-      if (error) {
-        console.error('Error deleting travel offer:', error);
-        throw error;
+      if (profile?.role === 'admin') {
+        // Admin can completely delete the record
+        console.log('Admin deletion - completely removing record');
+        const { error } = await supabase
+          .from('travel_offers')
+          .delete()
+          .eq('id', id);
+        
+        if (error) {
+          console.error('Error deleting travel offer:', error);
+          throw error;
+        }
+      } else {
+        // Non-admin users can only soft delete (set is_active to false)
+        console.log('Non-admin deletion - setting is_active to false');
+        const { error } = await supabase
+          .from('travel_offers')
+          .update({ is_active: false })
+          .eq('id', id);
+        
+        if (error) {
+          console.error('Error deactivating travel offer:', error);
+          throw error;
+        }
       }
       
-      console.log('Deleted travel offer with ID:', id);
+      console.log('Successfully processed delete request for travel offer with ID:', id);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
