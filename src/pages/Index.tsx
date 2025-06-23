@@ -12,14 +12,12 @@ const Index = () => {
   const navigate = useNavigate();
   const [showAuth, setShowAuth] = useState(false);
 
-  if (!user && !showAuth) {
-    return (
-      <HomeScreen />
-    );
-  }
-
   if (!user && showAuth) {
     return <AuthScreen onBack={() => setShowAuth(false)} />;
+  }
+
+  if (!user) {
+    return <HomeScreen />;
   }
 
   return (
@@ -87,12 +85,19 @@ const Index = () => {
             >
               Gérer les voyages
             </Button>
+            <Button
+              onClick={() => navigate('/promotions')}
+              variant="outline"
+              className="w-full justify-start"
+            >
+              Gérer les promotions
+            </Button>
           </div>
         </div>
       </div>
 
       {/* Logout Button */}
-      <div className="p-4">
+      <div className="p-4 pb-20">
         <SignOutButton />
       </div>
     </div>

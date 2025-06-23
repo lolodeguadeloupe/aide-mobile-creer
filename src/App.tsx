@@ -2,7 +2,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import HomeScreen from './components/HomeScreen';
+import Index from './pages/Index';
 import RestaurantsScreen from './components/RestaurantsScreen';
 import ConcertsScreen from './components/ConcertsScreen';
 import NightlifeScreen from './components/NightlifeScreen';
@@ -27,7 +27,7 @@ function App() {
           <div className="App">
             <Toaster />
             <Routes>
-              <Route path="/" element={<HomeScreen />} />
+              <Route path="/" element={<Index />} />
               <Route path="/restaurants" element={<RestaurantsScreen />} />
               <Route path="/concerts" element={<ConcertsScreen />} />
               <Route path="/nightlife" element={<NightlifeScreen />} />
@@ -38,6 +38,7 @@ function App() {
               <Route path="/travel-offers" element={<TravelOffersScreen />} />
               <Route path="/promotions" element={<PromotionsScreen />} />
             </Routes>
+            <MobileNavigation />
             <PWAInstallPrompt />
           </div>
         </Router>
