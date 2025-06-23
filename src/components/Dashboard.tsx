@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -40,7 +39,7 @@ const Dashboard = () => {
   ];
 
   const quickActions = [
-    { name: 'Nouveau restaurant', action: () => navigate('/restaurants'), icon: Plus },
+    { name: 'Gestion des restaurants', action: () => navigate('/restaurants'), icon: Plus },
     { name: 'Gérer les concerts', action: () => navigate('/concerts'), icon: Settings },
     { name: 'Voir les statistiques', action: () => navigate('/analytics'), icon: BarChart3 },
     { name: 'Notifications', action: () => navigate('/notifications'), icon: Bell },
