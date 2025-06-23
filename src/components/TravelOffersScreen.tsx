@@ -116,7 +116,6 @@ const TravelOffersScreen = () => {
           <TravelOffersList 
             onEditTravelOffer={handleEditTravelOffer} 
             travelOffers={filteredTravelOffers}
-            searchTerm={searchTerm}
           />
         )}
       </div>
