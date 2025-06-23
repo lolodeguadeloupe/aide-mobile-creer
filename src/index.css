@@ -136,3 +136,11 @@
 .gradient-green {
   background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
 }
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
