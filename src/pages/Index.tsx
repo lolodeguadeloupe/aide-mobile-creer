@@ -14,7 +14,7 @@ const Index = () => {
 
   if (!user && !showAuth) {
     return (
-      <HomeScreen onShowAuth={() => setShowAuth(true)} />
+      <HomeScreen />
     );
   }
 
@@ -24,7 +24,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HomeScreen onShowAuth={() => setShowAuth(true)} />
+      <HomeScreen />
       
       {/* Navigation rapide */}
       <div className="p-4">

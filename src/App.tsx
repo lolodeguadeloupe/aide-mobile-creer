@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -13,12 +14,14 @@ import TravelOffersScreen from './components/TravelOffersScreen';
 import MobileNavigation from './components/MobileNavigation';
 import { AuthProvider } from './contexts/AuthContext';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import PromotionsScreen from './components/PromotionsScreen';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <QueryClient>
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Router>
           <div className="App">
@@ -35,12 +38,11 @@ function App() {
               <Route path="/travel-offers" element={<TravelOffersScreen />} />
               <Route path="/promotions" element={<PromotionsScreen />} />
             </Routes>
-            <MobileNavigation />
             <PWAInstallPrompt />
           </div>
         </Router>
       </AuthProvider>
-    </QueryClient>
+    </QueryClientProvider>
   );
 }
 
