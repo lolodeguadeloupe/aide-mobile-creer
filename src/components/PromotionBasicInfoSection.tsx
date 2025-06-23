@@ -9,6 +9,7 @@ interface PromotionBasicInfoSectionProps {
     title: string;
     description: string;
     image: string;
+    gallery_images: string[];
     badge: string;
     cta_text: string;
     cta_url: string;
@@ -51,18 +52,6 @@ const PromotionBasicInfoSection: React.FC<PromotionBasicInfoSectionProps> = ({
             className="flex min-h-[60px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
             rows={3}
             required
-          />
-        </div>
-
-        {/* Image URL */}
-        <div>
-          <Label htmlFor="image">URL de l'image</Label>
-          <Input
-            id="image"
-            type="url"
-            value={formData.image}
-            onChange={(e) => onInputChange('image', e.target.value)}
-            placeholder="https://example.com/image.jpg"
           />
         </div>
 

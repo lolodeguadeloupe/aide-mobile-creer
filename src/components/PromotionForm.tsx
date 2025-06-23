@@ -6,6 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { usePromotions } from '@/hooks/usePromotions';
 import FormHeader from './FormHeader';
 import PromotionBasicInfoSection from './PromotionBasicInfoSection';
+import PromotionImagesSection from './PromotionImagesSection';
 
 interface PromotionFormProps {
   promotion?: any;
@@ -19,6 +20,7 @@ const PromotionForm: React.FC<PromotionFormProps> = ({ promotion, onClose }) => 
     title: '',
     description: '',
     image: '',
+    gallery_images: [],
     badge: '',
     cta_text: '',
     cta_url: '',
@@ -32,6 +34,7 @@ const PromotionForm: React.FC<PromotionFormProps> = ({ promotion, onClose }) => 
         title: promotion.title || '',
         description: promotion.description || '',
         image: promotion.image || '',
+        gallery_images: promotion.gallery_images || [],
         badge: promotion.badge || '',
         cta_text: promotion.cta_text || '',
         cta_url: promotion.cta_url || '',
@@ -82,6 +85,13 @@ const PromotionForm: React.FC<PromotionFormProps> = ({ promotion, onClose }) => 
         <PromotionBasicInfoSection
           formData={formData}
           onInputChange={handleInputChange}
+        />
+
+        <PromotionImagesSection
+          mainImage={formData.image}
+          galleryImages={formData.gallery_images}
+          onMainImageChange={(url) => handleInputChange('image', url)}
+          onGalleryImagesChange={(urls) => handleInputChange('gallery_images', urls)}
         />
         
         {/* Actions */}
