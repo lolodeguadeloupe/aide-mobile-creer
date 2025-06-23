@@ -6,13 +6,11 @@ import { useAuth } from '@/contexts/AuthContext';
 import AuthScreen from '@/components/AuthScreen';
 import HomeScreen from '@/components/HomeScreen';
 import SignOutButton from '@/components/SignOutButton';
-import { useIframe } from '@/hooks/useIframe';
 
 const Index = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [showAuth, setShowAuth] = useState(false);
-  const { isInIframe } = useIframe();
 
   if (!user && !showAuth) {
     return (
@@ -28,7 +26,7 @@ const Index = () => {
     <div className="min-h-screen bg-gray-50">
       <HomeScreen onShowAuth={() => setShowAuth(true)} />
       
-      {/* Navigation rapide - Toujours visible quand connecté */}
+      {/* Navigation rapide */}
       <div className="p-4">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Gestion</h2>
@@ -94,7 +92,7 @@ const Index = () => {
       </div>
 
       {/* Logout Button */}
-      <div className={`p-4 ${isInIframe ? 'pb-4' : 'pb-6'}`}>
+      <div className="p-4">
         <SignOutButton />
       </div>
     </div>

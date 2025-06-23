@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { usePWA } from '@/hooks/usePWA';
-import { useIframe } from '@/hooks/useIframe';
 
 interface HomeScreenProps {
   onShowAuth: () => void;
@@ -16,7 +15,6 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
   const navigate = useNavigate();
   const [showQuickMenu, setShowQuickMenu] = useState(false);
   const { isPWA, isStandalone } = usePWA();
-  const { isInIframe, parentOrigin } = useIframe();
 
   const stats = [
     { label: 'Utilisateurs actifs', value: '2.4K', icon: Users, color: 'bg-blue-500' },
@@ -58,7 +56,7 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
   };
 
   return (
-    <div className={`flex-1 bg-gradient-to-br from-blue-50 to-purple-50 p-4 ${isInIframe ? 'pb-4' : 'pb-24'}`}>
+    <div className="flex-1 bg-gradient-to-br from-blue-50 to-purple-50 p-4 pb-24">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
@@ -70,11 +68,6 @@ const HomeScreen = ({ onShowAuth }: HomeScreenProps) => {
             {isPWA && (
               <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
                 PWA
-              </span>
-            )}
-            {isInIframe && (
-              <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
-                Iframe
               </span>
             )}
           </div>
