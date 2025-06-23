@@ -39,11 +39,11 @@ const Index = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pb-20">
       <Dashboard />
       
       {/* Logout Button - Fixed position */}
-      <div className="fixed bottom-4 right-4">
+      <div className="fixed bottom-20 right-4 z-40">
         <SignOutButton />
       </div>
     </div>

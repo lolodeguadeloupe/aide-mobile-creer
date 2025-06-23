@@ -54,7 +54,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <div className="min-h-screen bg-gray-50 p-6 pb-24">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -133,7 +133,7 @@ const Dashboard = () => {
         </div>
 
         {/* Management Grid */}
-        <div className="mt-8">
+        <div className="mt-8 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Gestion des contenus</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {[
