@@ -89,6 +89,9 @@ const PromotionBasicInfoSection: React.FC<PromotionBasicInfoSectionProps> = ({
             value={formData.cta_url}
             onChange={(e) => onInputChange('cta_url', e.target.value)}
             placeholder="Ex: /hebergements, https://example.com/promotion"
+            autoComplete="off"
+            spellCheck="false"
+            pattern=".*"
           />
         </div>
 
