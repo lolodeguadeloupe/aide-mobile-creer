@@ -16,6 +16,9 @@
     <meta name="msapplication-TileColor" content="#3b82f6" />
     <meta name="msapplication-tap-highlight" content="no" />
     
+    <!-- Iframe optimization -->
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    
     <!-- Icons -->
     <link rel="icon" href="/lovable-uploads/f5ace6c4-51b1-496b-a1ba-7ca293c116e5.png" type="image/png">
     <link rel="apple-touch-icon" href="/lovable-uploads/f5ace6c4-51b1-496b-a1ba-7ca293c116e5.png" />
@@ -33,10 +36,31 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@lovable_dev" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+
+    <style>
+      /* Optimisation pour iframe */
+      body.iframe-mode {
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
+    </style>
   </head>
 
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <script>
+      // Détecter si l'app est dans une iframe
+      if (window.self !== window.top) {
+        document.body.classList.add('iframe-mode');
+        // Optionnel : communiquer avec le parent
+        window.parent.postMessage({
+          type: 'app-loaded',
+          origin: 'aide-mobile-app'
+        }, '*');
+      }
+    </script>
   </body>
 </html>
