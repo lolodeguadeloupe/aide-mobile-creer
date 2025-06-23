@@ -1,15 +1,12 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
 import AuthScreen from '@/components/AuthScreen';
-import HomeScreen from '@/components/HomeScreen';
+import Dashboard from '@/components/Dashboard';
 import SignOutButton from '@/components/SignOutButton';
 
 const Index = () => {
   const { user } = useAuth();
-  const navigate = useNavigate();
   const [showAuth, setShowAuth] = useState(false);
 
   if (!user && showAuth) {
@@ -17,87 +14,36 @@ const Index = () => {
   }
 
   if (!user) {
-    return <HomeScreen />;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
+        <div className="max-w-md w-full space-y-8 p-8">
+          <div className="text-center">
+            <h2 className="mt-6 text-3xl font-extrabold text-gray-900">
+              Tableau de bord administrateur
+            </h2>
+            <p className="mt-2 text-sm text-gray-600">
+              Connectez-vous pour accéder à votre interface d'administration
+            </p>
+          </div>
+          <div className="mt-8 space-y-4">
+            <button
+              onClick={() => setShowAuth(true)}
+              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+            >
+              Se connecter
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <HomeScreen />
+      <Dashboard />
       
-      {/* Navigation rapide */}
-      <div className="p-4">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Gestion</h2>
-          <div className="space-y-2">
-            <Button
-              onClick={() => navigate('/accommodations')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les hébergements
-            </Button>
-            <Button
-              onClick={() => navigate('/restaurants')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les restaurants
-            </Button>
-            <Button
-              onClick={() => navigate('/concerts')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les concerts
-            </Button>
-            <Button
-              onClick={() => navigate('/nightlife')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les soirées
-            </Button>
-            <Button
-              onClick={() => navigate('/loisirs')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les loisirs
-            </Button>
-            <Button
-              onClick={() => navigate('/activities')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les activités
-            </Button>
-            <Button
-              onClick={() => navigate('/car-rentals')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les locations de voitures
-            </Button>
-            <Button
-              onClick={() => navigate('/travel-offers')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les voyages
-            </Button>
-            <Button
-              onClick={() => navigate('/promotions')}
-              variant="outline"
-              className="w-full justify-start"
-            >
-              Gérer les promotions
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Logout Button */}
-      <div className="p-4 pb-20">
+      {/* Logout Button - Fixed position */}
+      <div className="fixed bottom-4 right-4">
         <SignOutButton />
       </div>
     </div>
