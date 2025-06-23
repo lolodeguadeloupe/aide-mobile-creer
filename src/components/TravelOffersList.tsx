@@ -1,167 +1,151 @@
 
 import React from 'react';
-import { Card, CardContent } from '@/components/ui/card';
+import { Edit, Trash2, Calendar, MapPin, Users, Clock, Euro } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Edit, Trash2, MapPin, Calendar, Users } from 'lucide-react';
 import { useTravelOffers } from '@/hooks/useTravelOffers';
-import { useToast } from '@/hooks/use-toast';
 
 interface TravelOffersListProps {
-  onEditTravelOffer: (travelOffer: any) => void;
-  travelOffers?: any[];
+  searchTerm: string;
+  onEdit: (travelOffer: any) => void;
 }
 
-const TravelOffersList: React.FC<TravelOffersListProps> = ({ onEditTravelOffer, travelOffers: propTravelOffers }) => {
-  const { data: fetchedTravelOffers, isLoading, error } = useTravelOffers();
-  const { deleteTravelOffer } = useTravelOffers();
-  const { toast } = useToast();
+const TravelOffersList: React.FC<TravelOffersListProps> = ({ searchTerm, onEdit }) => {
+  const { data: travelOffers, deleteTravelOffer, isDeleting } = useTravelOffers();
 
-  // Use prop travel offers if provided, otherwise use fetched travel offers
-  const travelOffers = propTravelOffers || fetchedTravelOffers;
-
-  const handleEdit = (travelOffer: any) => {
-    console.log('Editing travel offer:', travelOffer);
-    // Ensure we have a valid travel offer with an ID
-    if (!travelOffer || !travelOffer.id) {
-      console.error('Invalid travel offer:', travelOffer);
-      toast({
-        title: "Erreur",
-        description: "Impossible de modifier cette offre de voyage (ID manquant)",
-        variant: "destructive",
-      });
-      return;
-    }
-    onEditTravelOffer(travelOffer);
-  };
+  const filteredOffers = travelOffers?.filter(offer =>
+    offer.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    offer.destination?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    offer.departure_location?.toLowerCase().includes(searchTerm.toLowerCase())
+  ) || [];
 
   const handleDelete = async (id: number) => {
-    console.log('Attempting to delete travel offer with ID:', id);
-    if (!id) {
-      console.error('No ID provided for deletion');
-      toast({
-        title: "Erreur",
-        description: "ID de l'offre manquant",
-        variant: "destructive",
-      });
-      return;
-    }
-
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette offre de voyage ?')) {
       try {
         await deleteTravelOffer(id);
-        toast({
-          title: "Succès",
-          description: "Offre de voyage supprimée avec succès",
-        });
       } catch (error) {
-        console.error('Delete error:', error);
-        toast({
-          title: "Erreur",
-          description: "Erreur lors de la suppression de l'offre de voyage",
-          variant: "destructive",
-        });
+        console.error('Error deleting travel offer:', error);
       }
     }
   };
 
-  if (isLoading && !propTravelOffers) {
-    return (
-      <div className="flex justify-center items-center py-8">
-        <div className="text-gray-500">Chargement...</div>
-      </div>
-    );
-  }
-
-  if (error && !propTravelOffers) {
-    console.error('Error loading travel offers:', error);
+  if (filteredOffers.length === 0) {
     return (
       <div className="text-center py-8">
-        <div className="text-red-500">Erreur lors du chargement des offres de voyage</div>
-      </div>
-    );
-  }
-
-  if (!travelOffers || travelOffers.length === 0) {
-    return (
-      <div className="text-center py-8">
-        <div className="text-gray-500">Aucune offre de voyage trouvée</div>
+        <p className="text-gray-500">Aucune offre de voyage trouvée</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-4">
-      {travelOffers.map((travelOffer) => {
-        // Add safety check for each travel offer
-        if (!travelOffer || !travelOffer.id) {
-          console.warn('Skipping invalid travel offer:', travelOffer);
-          return null;
-        }
-
-        return (
-          <Card key={travelOffer.id} className="overflow-hidden">
-            <CardContent className="p-0">
-              <div className="flex">
-                {/* Image principale */}
-                <div className="w-24 h-24 flex-shrink-0">
-                  <img
-                    src={travelOffer.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop'}
-                    alt={travelOffer.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                
-                {/* Content */}
-                <div className="flex-1 p-4">
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-900">{travelOffer.title}</h3>
-                      
-                      <div className="flex items-center text-sm text-gray-500 mb-1">
-                        <MapPin size={14} className="mr-1" />
-                        {travelOffer.departure_location} → {travelOffer.destination}
-                      </div>
-                      
-                      <div className="flex items-center text-sm text-gray-500 mb-1">
-                        <Calendar size={14} className="mr-1" />
-                        {travelOffer.duration_days} jours
-                      </div>
-
-                      <div className="flex items-center text-sm text-gray-500 mb-2">
-                        <Users size={14} className="mr-1" />
-                        {travelOffer.current_participants || 0}/{travelOffer.max_participants} participants
-                      </div>
-                      
-                      <div className="text-lg font-bold text-blue-600">
-                        {travelOffer.price}€
-                      </div>
-                    </div>
-                    
-                    {/* Actions */}
-                    <div className="flex space-x-2 ml-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(travelOffer)}
-                      >
-                        <Edit size={16} />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(travelOffer.id)}
-                        className="text-red-600 hover:text-red-700"
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </div>
-                  </div>
+      {filteredOffers.map((offer) => (
+        <div key={offer.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+          <div className="flex">
+            {/* Image */}
+            <div className="w-32 h-32 flex-shrink-0">
+              <img
+                src={offer.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=300&h=200&fit=crop'}
+                alt={offer.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            {/* Content */}
+            <div className="flex-1 p-4">
+              <div className="flex justify-between items-start mb-2">
+                <h3 className="text-lg font-semibold text-gray-900">{offer.title}</h3>
+                <div className="flex space-x-2">
+                  <Button
+                    onClick={() => onEdit(offer)}
+                    variant="ghost"
+                    size="sm"
+                    className="text-blue-600 hover:text-blue-800"
+                  >
+                    <Edit size={16} />
+                  </Button>
+                  <Button
+                    onClick={() => handleDelete(offer.id)}
+                    variant="ghost"
+                    size="sm"
+                    className="text-red-600 hover:text-red-800"
+                    disabled={isDeleting}
+                  >
+                    <Trash2 size={16} />
+                  </Button>
                 </div>
               </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+              
+              {/* Details */}
+              <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-3">
+                <div className="flex items-center gap-1">
+                  <MapPin size={14} />
+                  <span>{offer.destination}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Clock size={14} />
+                  <span>{offer.duration_days} jours</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users size={14} />
+                  <span>{offer.current_participants || 0}/{offer.max_participants || 20}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Euro size={14} />
+                  <span className="font-semibold text-blue-600">{offer.price}€</span>
+                </div>
+                {offer.departure_date && (
+                  <div className="flex items-center gap-1">
+                    <Calendar size={14} />
+                    <span>{new Date(offer.departure_date).toLocaleDateString('fr-FR')}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Description */}
+              {offer.description && (
+                <p className="text-gray-700 text-sm mb-3 line-clamp-2">
+                  {offer.description}
+                </p>
+              )}
+
+              {/* Inclusions */}
+              {offer.inclusions && offer.inclusions.length > 0 && (
+                <div className="mb-2">
+                  <h4 className="text-sm font-medium text-green-700 mb-1">✓ Inclusions:</h4>
+                  <div className="flex flex-wrap gap-1">
+                    {offer.inclusions.slice(0, 3).map((inclusion: string, index: number) => (
+                      <span
+                        key={index}
+                        className="inline-block bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full"
+                      >
+                        {inclusion}
+                      </span>
+                    ))}
+                    {offer.inclusions.length > 3 && (
+                      <span className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded-full">
+                        +{offer.inclusions.length - 3} autres
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Status */}
+              <div className="flex items-center justify-between">
+                <span className={`inline-block px-2 py-1 rounded-full text-xs ${
+                  offer.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  {offer.is_active ? 'Actif' : 'Inactif'}
+                </span>
+                
+                <span className="text-xs text-gray-500">
+                  Départ: {offer.departure_location}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
