@@ -4,14 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { Plus, X } from 'lucide-react';
+
+interface Amenity {
+  name: string;
+  available: boolean;
+}
 
 interface AccommodationFeaturesSectionProps {
   features: string[];
-  amenities: string[];
+  amenities: Amenity[];
   rules: string[];
   onFeaturesChange: (features: string[]) => void;
-  onAmenitiesChange: (amenities: string[]) => void;
+  onAmenitiesChange: (amenities: Amenity[]) => void;
   onRulesChange: (rules: string[]) => void;
 }
 
@@ -38,16 +44,22 @@ const AccommodationFeaturesSection: React.FC<AccommodationFeaturesSectionProps> 
   };
 
   const addAmenity = () => {
-    onAmenitiesChange([...amenities, '']);
+    onAmenitiesChange([...amenities, { name: '', available: true }]);
   };
 
   const removeAmenity = (index: number) => {
     onAmenitiesChange(amenities.filter((_, i) => i !== index));
   };
 
-  const updateAmenity = (index: number, value: string) => {
+  const updateAmenityName = (index: number, name: string) => {
     const updatedAmenities = [...amenities];
-    updatedAmenities[index] = value;
+    updatedAmenities[index] = { ...updatedAmenities[index], name };
+    onAmenitiesChange(updatedAmenities);
+  };
+
+  const updateAmenityAvailability = (index: number, available: boolean) => {
+    const updatedAmenities = [...amenities];
+    updatedAmenities[index] = { ...updatedAmenities[index], available };
     onAmenitiesChange(updatedAmenities);
   };
 
@@ -69,10 +81,10 @@ const AccommodationFeaturesSection: React.FC<AccommodationFeaturesSectionProps> 
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 space-y-6">
       <h2 className="text-lg font-medium text-gray-900">Équipements et règlement</h2>
       
-      {/* Équipements */}
+      {/* Équipements généraux */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <Label className="text-sm font-medium text-gray-700">Équipements</Label>
+          <Label className="text-sm font-medium text-gray-700">Équipements généraux</Label>
           <Button
             type="button"
             variant="outline"
@@ -110,10 +122,10 @@ const AccommodationFeaturesSection: React.FC<AccommodationFeaturesSectionProps> 
         </div>
       </div>
 
-      {/* Commodités */}
+      {/* Équipements avec disponibilité */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <Label className="text-sm font-medium text-gray-700">Commodités</Label>
+          <Label className="text-sm font-medium text-gray-700">Équipements détaillés</Label>
           <Button
             type="button"
             variant="outline"
@@ -125,15 +137,22 @@ const AccommodationFeaturesSection: React.FC<AccommodationFeaturesSectionProps> 
             Ajouter
           </Button>
         </div>
-        <div className="space-y-2">
+        <div className="space-y-3">
           {amenities.map((amenity, index) => (
-            <div key={index} className="flex items-center gap-2">
+            <div key={index} className="flex items-center gap-2 p-3 border border-gray-200 rounded-lg">
               <Input
-                value={amenity}
-                onChange={(e) => updateAmenity(index, e.target.value)}
+                value={amenity.name}
+                onChange={(e) => updateAmenityName(index, e.target.value)}
                 placeholder="Ex: Piscine, Parking gratuit, Petit-déjeuner inclus..."
                 className="flex-1"
               />
+              <div className="flex items-center gap-2">
+                <Label className="text-sm text-gray-600">Disponible</Label>
+                <Switch
+                  checked={amenity.available}
+                  onCheckedChange={(checked) => updateAmenityAvailability(index, checked)}
+                />
+              </div>
               <Button
                 type="button"
                 variant="outline"
@@ -146,7 +165,7 @@ const AccommodationFeaturesSection: React.FC<AccommodationFeaturesSectionProps> 
             </div>
           ))}
           {amenities.length === 0 && (
-            <p className="text-sm text-gray-500 italic">Aucune commodité ajoutée</p>
+            <p className="text-sm text-gray-500 italic">Aucun équipement détaillé ajouté</p>
           )}
         </div>
       </div>
@@ -172,7 +191,7 @@ const AccommodationFeaturesSection: React.FC<AccommodationFeaturesSectionProps> 
               <Textarea
                 value={rule}
                 onChange={(e) => updateRule(index, e.target.value)}
-                placeholder="Ex: Arrivée après 15h, Départ avant 11h, Animaux non autorisés..."
+                placeholder="Ex: Check-in: 15h00, Check-out: 11h00, Interdiction de fumer..."
                 className="flex-1 min-h-[60px]"
                 rows={2}
               />

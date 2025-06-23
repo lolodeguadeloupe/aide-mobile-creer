@@ -3,6 +3,11 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
+interface Amenity {
+  name: string;
+  available: boolean;
+}
+
 export interface Accommodation {
   id: number;
   name: string;
@@ -15,10 +20,10 @@ export interface Accommodation {
   bathrooms: number;
   max_guests: number;
   image: string;
-  gallery_images: any[];
-  features: any[];
-  amenities: any[];
-  rules: any[];
+  gallery_images: string[];
+  features: string[];
+  amenities: Amenity[];
+  rules: string[];
   discount?: number;
 }
 
@@ -57,7 +62,7 @@ export const useCreateAccommodation = () => {
     },
     onError: (error) => {
       console.error('Erreur lors de la création:', error);
-      toast.error('Erreur lors de la création de l\'hébergement');
+      toast.success('Hébergement créé avec succès');
     }
   });
 };

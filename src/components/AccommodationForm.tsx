@@ -8,6 +8,11 @@ import ImagesSection from './ImagesSection';
 import DetailsSection from './DetailsSection';
 import AccommodationFeaturesSection from './AccommodationFeaturesSection';
 
+interface Amenity {
+  name: string;
+  available: boolean;
+}
+
 interface AccommodationFormProps {
   accommodation?: Accommodation | null;
   onClose: () => void;
@@ -30,9 +35,9 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
     max_guests: 2,
     image: '',
     gallery_images: [] as string[],
-    features: [],
-    amenities: [],
-    rules: [],
+    features: [] as string[],
+    amenities: [] as Amenity[],
+    rules: [] as string[],
     discount: 0
   });
 
@@ -52,9 +57,15 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
         gallery_images: Array.isArray(accommodation.gallery_images) 
           ? accommodation.gallery_images 
           : [],
-        features: accommodation.features || [],
-        amenities: accommodation.amenities || [],
-        rules: accommodation.rules || [],
+        features: Array.isArray(accommodation.features) 
+          ? accommodation.features 
+          : [],
+        amenities: Array.isArray(accommodation.amenities) 
+          ? accommodation.amenities 
+          : [],
+        rules: Array.isArray(accommodation.rules) 
+          ? accommodation.rules 
+          : [],
         discount: accommodation.discount || 0
       });
     }
