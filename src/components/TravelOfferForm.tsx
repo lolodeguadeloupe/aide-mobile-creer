@@ -5,7 +5,6 @@ import { useTravelOffers } from '@/hooks/useTravelOffers';
 import FormHeader from './FormHeader';
 import TravelOfferBasicInfoSection from './TravelOfferBasicInfoSection';
 import TravelOfferImagesSection from './TravelOfferImagesSection';
-import TravelOfferInclusionsSection from './TravelOfferInclusionsSection';
 
 interface TravelOfferFormProps {
   travelOffer?: any;
@@ -26,13 +25,13 @@ const TravelOfferForm: React.FC<TravelOfferFormProps> = ({ travelOffer, onClose 
     return_date: '',
     max_participants: 20,
     current_participants: 0,
+    inclusions: [],
+    exclusions: [],
     is_active: true
   });
   
   const [mainImage, setMainImage] = useState('');
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
-  const [inclusions, setInclusions] = useState<string[]>([]);
-  const [exclusions, setExclusions] = useState<string[]>([]);
 
   useEffect(() => {
     if (travelOffer) {
@@ -47,19 +46,16 @@ const TravelOfferForm: React.FC<TravelOfferFormProps> = ({ travelOffer, onClose 
         return_date: travelOffer.return_date || '',
         max_participants: travelOffer.max_participants || 20,
         current_participants: travelOffer.current_participants || 0,
+        inclusions: travelOffer.inclusions || [],
+        exclusions: travelOffer.exclusions || [],
         is_active: travelOffer.is_active !== false
       });
       // Utiliser l'image principale ou une image par défaut
       setMainImage(travelOffer.image || 'https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop');
       setGalleryImages(travelOffer.gallery_images || []);
-      setInclusions(travelOffer.inclusions || []);
-      setExclusions(travelOffer.exclusions || []);
     } else {
       // Pour les nouvelles offres, définir une image par défaut
       setMainImage('https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop');
-      // Définir des inclusions par défaut pour les nouvelles offres
-      setInclusions(['Vol aller-retour', 'Hébergement']);
-      setExclusions(['Boissons', 'Excursions optionnelles']);
     }
   }, [travelOffer]);
 
@@ -76,9 +72,7 @@ const TravelOfferForm: React.FC<TravelOfferFormProps> = ({ travelOffer, onClose 
     const travelOfferData = {
       ...formData,
       image: mainImage,
-      gallery_images: galleryImages,
-      inclusions: inclusions,
-      exclusions: exclusions
+      gallery_images: galleryImages
     };
 
     try {
@@ -106,13 +100,6 @@ const TravelOfferForm: React.FC<TravelOfferFormProps> = ({ travelOffer, onClose 
         <TravelOfferBasicInfoSection
           formData={formData}
           onInputChange={handleInputChange}
-        />
-        
-        <TravelOfferInclusionsSection
-          inclusions={inclusions}
-          exclusions={exclusions}
-          onInclusionsChange={setInclusions}
-          onExclusionsChange={setExclusions}
         />
         
         <TravelOfferImagesSection
