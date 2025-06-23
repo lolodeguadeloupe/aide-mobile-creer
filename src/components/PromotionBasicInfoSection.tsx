@@ -85,10 +85,10 @@ const PromotionBasicInfoSection: React.FC<PromotionBasicInfoSectionProps> = ({
           <Label htmlFor="cta_url">URL du bouton d'action</Label>
           <Input
             id="cta_url"
-            type="url"
+            type="text"
             value={formData.cta_url}
             onChange={(e) => onInputChange('cta_url', e.target.value)}
-            placeholder="https://example.com/promotion"
+            placeholder="Ex: /hebergements, https://example.com/promotion"
           />
         </div>
 
