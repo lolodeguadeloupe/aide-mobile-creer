@@ -6,6 +6,7 @@ import FormHeader from './FormHeader';
 import BasicInfoSection from './BasicInfoSection';
 import ImagesSection from './ImagesSection';
 import DetailsSection from './DetailsSection';
+import AccommodationFeaturesSection from './AccommodationFeaturesSection';
 
 interface AccommodationFormProps {
   accommodation?: Accommodation | null;
@@ -124,6 +125,15 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
               discount: formData.discount
             }}
             onInputChange={handleInputChange}
+          />
+
+          <AccommodationFeaturesSection
+            features={formData.features}
+            amenities={formData.amenities}
+            rules={formData.rules}
+            onFeaturesChange={(features) => handleInputChange('features', features)}
+            onAmenitiesChange={(amenities) => handleInputChange('amenities', amenities)}
+            onRulesChange={(rules) => handleInputChange('rules', rules)}
           />
 
           <div className="pt-4">
