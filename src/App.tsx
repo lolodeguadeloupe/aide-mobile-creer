@@ -11,7 +11,6 @@ import AccommodationsScreen from './components/AccommodationsScreen';
 import CarRentalsScreen from './components/CarRentalsScreen';
 import ActivitiesScreen from './components/ActivitiesScreen';
 import TravelOffersScreen from './components/TravelOffersScreen';
-import MobileNavigation from './components/MobileNavigation';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PromotionsScreen from './components/PromotionsScreen';
 
@@ -31,7 +30,6 @@ function App() {
         <Route path="/travel-offers" element={<TravelOffersScreen />} />
         <Route path="/promotions" element={<PromotionsScreen />} />
       </Routes>
-      <MobileNavigation />
       <PWAInstallPrompt />
     </div>
   );
