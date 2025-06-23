@@ -62,10 +62,10 @@ const convertToDbFormat = (accommodation: Omit<Accommodation, 'id'>) => {
     bathrooms: accommodation.bathrooms,
     max_guests: accommodation.max_guests,
     image: accommodation.image,
-    gallery_images: accommodation.gallery_images,
-    features: accommodation.features,
-    amenities: accommodation.amenities,
-    rules: accommodation.rules,
+    gallery_images: accommodation.gallery_images as any,
+    features: accommodation.features as any,
+    amenities: accommodation.amenities as any,
+    rules: accommodation.rules as any,
     discount: accommodation.discount
   };
 };
