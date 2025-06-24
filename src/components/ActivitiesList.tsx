@@ -3,7 +3,8 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Edit, Trash2, Star, Search } from 'lucide-react';
+import { Switch } from '@/components/ui/switch';
+import { Edit, Trash2, Star, Search, Eye, EyeOff } from 'lucide-react';
 import { useActivities } from '@/hooks/useActivities';
 import { useToast } from '@/hooks/use-toast';
 
@@ -13,7 +14,7 @@ interface ActivitiesListProps {
 
 const ActivitiesList: React.FC<ActivitiesListProps> = ({ onEditActivity }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const { data: allActivities, isLoading, error, deleteActivity } = useActivities();
+  const { data: allActivities, isLoading, error, deleteActivity, updateActivity } = useActivities();
   const { toast } = useToast();
 
   // Filter activities based on search term
@@ -46,6 +47,25 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ onEditActivity }) => {
           variant: "destructive",
         });
       }
+    }
+  };
+
+  const handleToggleActive = async (activity: any) => {
+    try {
+      await updateActivity({
+        id: activity.id,
+        is_active: !activity.is_active
+      });
+      toast({
+        title: "Succès",
+        description: `Activité ${!activity.is_active ? 'activée' : 'désactivée'} avec succès`,
+      });
+    } catch (error) {
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de la modification de l'activité",
+        variant: "destructive",
+      });
     }
   };
 
@@ -113,11 +133,13 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ onEditActivity }) => {
                     {activity.rating ? activity.rating.toFixed(1) : '0.0'}
                     <span className="ml-2">
                       {activity.is_active ? (
-                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
+                        <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs flex items-center">
+                          <Eye size={12} className="mr-1" />
                           Actif
                         </span>
                       ) : (
-                        <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs">
+                        <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs flex items-center">
+                          <EyeOff size={12} className="mr-1" />
                           Inactif
                         </span>
                       )}
@@ -126,7 +148,18 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ onEditActivity }) => {
                 </div>
                 
                 {/* Actions */}
-                <div className="flex space-x-2 ml-4">
+                <div className="flex items-center space-x-3 ml-4">
+                  {/* Active/Inactive Toggle */}
+                  <div className="flex items-center space-x-2">
+                    <Switch
+                      checked={activity.is_active}
+                      onCheckedChange={() => handleToggleActive(activity)}
+                    />
+                    <span className="text-xs text-gray-500">
+                      {activity.is_active ? 'Actif' : 'Inactif'}
+                    </span>
+                  </div>
+                  
                   <Button
                     variant="outline"
                     size="sm"
