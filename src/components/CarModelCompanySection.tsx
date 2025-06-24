@@ -5,9 +5,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 interface CarModelCompanySectionProps {
   formData: {
-    company_id: number;
+    company_id: string;
   };
-  companies: Array<{ id: number; name: string }> | undefined;
+  companies: any[];
   onInputChange: (field: string, value: any) => void;
 }
 
@@ -18,18 +18,18 @@ const CarModelCompanySection: React.FC<CarModelCompanySectionProps> = ({
 }) => {
   return (
     <div>
-      <Label htmlFor="company_id">Compagnie</Label>
+      <Label htmlFor="company_id">Compagnie de location</Label>
       <Select
-        value={formData.company_id.toString()}
-        onValueChange={(value) => onInputChange('company_id', parseInt(value))}
+        value={formData.company_id}
+        onValueChange={(value) => onInputChange('company_id', value)}
       >
         <SelectTrigger>
           <SelectValue placeholder="Sélectionner une compagnie" />
         </SelectTrigger>
         <SelectContent>
           {companies?.map((company) => (
-            <SelectItem key={company.id} value={company.id.toString()}>
-              {company.name}
+            <SelectItem key={company.id} value={company.id}>
+              {company.business_name} - {company.location}
             </SelectItem>
           ))}
         </SelectContent>

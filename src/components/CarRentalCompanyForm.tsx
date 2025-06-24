@@ -21,7 +21,9 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
     description: '',
     offer: '',
     rating: 0,
-    icon_name: 'car',
+    address: '',
+    phone: '',
+    website: '',
   });
 
   const [mainImage, setMainImage] = useState('');
@@ -32,13 +34,15 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
   useEffect(() => {
     if (company) {
       setFormData({
-        name: company.name || '',
+        name: company.business_name || '',
         type: company.type || '',
         location: company.location || '',
         description: company.description || '',
         offer: company.offer || '',
         rating: company.rating || 0,
-        icon_name: company.icon_name || 'car',
+        address: company.address || '',
+        phone: company.phone || '',
+        website: company.website || '',
       });
       setMainImage(company.image || '');
       setGalleryImages(company.gallery_images || []);
@@ -141,17 +145,52 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
             />
           </div>
 
-          <div>
-            <Label htmlFor="rating">Note (0-5)</Label>
-            <Input
-              id="rating"
-              type="number"
-              min="0"
-              max="5"
-              step="0.1"
-              value={formData.rating}
-              onChange={(e) => handleInputChange('rating', parseFloat(e.target.value) || 0)}
-            />
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="rating">Note (0-5)</Label>
+              <Input
+                id="rating"
+                type="number"
+                min="0"
+                max="5"
+                step="0.1"
+                value={formData.rating}
+                onChange={(e) => handleInputChange('rating', parseFloat(e.target.value) || 0)}
+              />
+            </div>
+            <div>
+              <Label htmlFor="phone">Téléphone</Label>
+              <Input
+                id="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={(e) => handleInputChange('phone', e.target.value)}
+                placeholder="ex: +596 596 12 34 56"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="address">Adresse</Label>
+              <Input
+                id="address"
+                type="text"
+                value={formData.address}
+                onChange={(e) => handleInputChange('address', e.target.value)}
+                placeholder="Adresse complète"
+              />
+            </div>
+            <div>
+              <Label htmlFor="website">Site web</Label>
+              <Input
+                id="website"
+                type="url"
+                value={formData.website}
+                onChange={(e) => handleInputChange('website', e.target.value)}
+                placeholder="https://example.com"
+              />
+            </div>
           </div>
 
           {/* Image Management Section */}

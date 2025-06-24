@@ -7,7 +7,7 @@ export const useCarModels = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  // Fetch all car models
+  // Fetch all car models with their associated companies
   const { data, isLoading, error } = useQuery({
     queryKey: ['car-models'],
     queryFn: async () => {
@@ -15,8 +15,8 @@ export const useCarModels = () => {
         .from('car_models')
         .select(`
           *,
-          car_rental_companies (
-            name,
+          partners (
+            business_name,
             location
           )
         `)

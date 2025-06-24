@@ -17,12 +17,12 @@ const CarRentalCompaniesList: React.FC<CarRentalCompaniesListProps> = ({ onEditC
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredCompanies = companies?.filter(company =>
-    company.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    company.business_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     company.location?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     company.type?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer cette compagnie ?')) {
       try {
         deleteCompany(id);
@@ -79,7 +79,7 @@ const CarRentalCompaniesList: React.FC<CarRentalCompaniesListProps> = ({ onEditC
                 <div className="flex justify-between items-start">
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                      {company.name}
+                      {company.business_name}
                     </h3>
                     <div className="space-y-1 text-sm text-gray-600">
                       <p><span className="font-medium">Type:</span> {company.type}</p>

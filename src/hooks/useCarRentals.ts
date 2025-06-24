@@ -15,9 +15,9 @@ export const useCarRentals = () => {
         .from('car_models')
         .select(`
           *,
-          car_rental_companies (
+          partners (
             id,
-            name,
+            business_name,
             location,
             type,
             rating

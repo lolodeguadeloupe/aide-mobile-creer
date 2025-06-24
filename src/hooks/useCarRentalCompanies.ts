@@ -7,22 +7,18 @@ export const useCarRentalCompanies = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
 
-  // Fetch all car rental companies
+  // Fetch all car rental companies from partners table
   const { data, isLoading, error } = useQuery({
     queryKey: ['car-rental-companies'],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('car_rental_companies')
+        .from('partners')
         .select('*')
-        .order('name');
+        .eq('business_type', 'car_rental')
+        .order('business_name');
       
       if (error) throw error;
-      
-      // Parse gallery_images JSON for each company
-      return data?.map(company => ({
-        ...company,
-        gallery_images: company.gallery_images || []
-      }));
+      return data;
     },
   });
 
@@ -30,8 +26,13 @@ export const useCarRentalCompanies = () => {
   const createCompany = useMutation({
     mutationFn: async (company: any) => {
       const { data, error } = await supabase
-        .from('car_rental_companies')
-        .insert([company])
+        .from('partners')
+        .insert([{
+          ...company,
+          business_type: 'car_rental',
+          business_name: company.name,
+          type: company.type
+        }])
         .select();
       
       if (error) throw error;
@@ -41,7 +42,7 @@ export const useCarRentalCompanies = () => {
       queryClient.invalidateQueries({ queryKey: ['car-rental-companies'] });
       toast({
         title: "Succès",
-        description: "Compagnie de location créée avec succès",
+        description: "Compagnie créée avec succès",
       });
     },
     onError: (error) => {
@@ -57,8 +58,13 @@ export const useCarRentalCompanies = () => {
   const updateCompany = useMutation({
     mutationFn: async ({ id, ...company }: any) => {
       const { data, error } = await supabase
-        .from('car_rental_companies')
-        .update(company)
+        .from('partners')
+        .update({
+          ...company,
+          business_type: 'car_rental',
+          business_name: company.name,
+          type: company.type
+        })
         .eq('id', id)
         .select();
       
@@ -83,9 +89,9 @@ export const useCarRentalCompanies = () => {
   });
 
   const deleteCompany = useMutation({
-    mutationFn: async (id: number) => {
+    mutationFn: async (id: string) => {
       const { error } = await supabase
-        .from('car_rental_companies')
+        .from('partners')
         .delete()
         .eq('id', id);
       
