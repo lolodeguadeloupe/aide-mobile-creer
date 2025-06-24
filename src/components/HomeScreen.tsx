@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { UtensilsCrossed, Music, Moon, Gamepad2, Building, Car, MapPin, Plane, Percent } from 'lucide-react';
+import { UtensilsCrossed, Music, Moon, Gamepad2, Building, Car, MapPin, Plane, Percent, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const HomeScreen = () => {
@@ -19,6 +19,7 @@ const HomeScreen = () => {
     { name: 'Activités', icon: MapPin, path: '/activities', color: 'bg-teal-500' },
     { name: 'Voyages', icon: Plane, path: '/travel-offers', color: 'bg-sky-500' },
     { name: 'Promotions', icon: Percent, path: '/promotions', color: 'bg-pink-500' },
+    { name: 'Bons Plans', icon: Gift, path: '/bons-plans', color: 'bg-yellow-500' },
   ];
 
   return (

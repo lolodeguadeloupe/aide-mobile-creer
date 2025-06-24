@@ -13,6 +13,7 @@ import ActivitiesScreen from './components/ActivitiesScreen';
 import TravelOffersScreen from './components/TravelOffersScreen';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PromotionsScreen from './components/PromotionsScreen';
+import BonsPlansScreen from './components/BonsPlansScreen';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path="/activities" element={<ActivitiesScreen />} />
         <Route path="/travel-offers" element={<TravelOffersScreen />} />
         <Route path="/promotions" element={<PromotionsScreen />} />
+        <Route path="/bons-plans" element={<BonsPlansScreen />} />
       </Routes>
       <PWAInstallPrompt />
     </div>

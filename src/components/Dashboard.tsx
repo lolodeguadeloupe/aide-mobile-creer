@@ -106,6 +106,10 @@ const Dashboard = () => {
       name: 'Promotions',
       path: '/promotions',
       count: stats?.promotions || 0
+    }, {
+      name: 'Bons Plans',
+      path: '/bons-plans',
+      count: stats?.bonsPlans || 0
     }
   ];
 
