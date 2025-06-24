@@ -45,6 +45,10 @@ const Dashboard = () => {
     action: () => navigate('/concerts'),
     icon: Settings
   }, {
+    name: 'Gestion des voitures',
+    action: () => navigate('/car-rentals'),
+    icon: Settings
+  }, {
     name: 'Voir les statistiques',
     action: () => navigate('/analytics'),
     icon: BarChart3
@@ -82,6 +86,10 @@ const Dashboard = () => {
       name: 'Concerts',
       path: '/concerts',
       count: stats?.concerts || 0
+    }, {
+      name: 'Gestion des voitures',
+      path: '/car-rentals',
+      count: stats?.carRentals || 0
     }, {
       name: 'Hébergements',
       path: '/accommodations',
@@ -144,6 +152,24 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">Actions rapides</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {quickActions.map((action, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                className="flex flex-col items-center justify-center p-6 h-auto"
+                onClick={action.action}
+              >
+                <action.icon className="h-6 w-6 mb-2" />
+                <span className="text-sm text-center">{action.name}</span>
+              </Button>
+            ))}
+          </div>
         </div>
 
         {/* Management Grid */}
