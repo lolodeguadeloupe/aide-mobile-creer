@@ -91,6 +91,10 @@ const Dashboard = () => {
       path: '/activities',
       count: stats?.activities || 0
     }, {
+      name: 'Activités de loisir',
+      path: '/leisure-activities',
+      count: stats?.leisureActivities || 0
+    }, {
       name: 'Loisirs',
       path: '/loisirs',
       count: stats?.loisirs || 0
