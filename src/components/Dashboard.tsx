@@ -1,11 +1,16 @@
+
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Users, TrendingUp, Star, Plus, BarChart3, Settings, Bell } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useDashboardStats } from '@/hooks/useDashboardStats';
+
 const Dashboard = () => {
   const navigate = useNavigate();
-  const stats = [{
+  const { data: stats, isLoading } = useDashboardStats();
+
+  const statCards = [{
     title: "Utilisateurs actifs",
     value: "2,543",
     change: "+12%",
@@ -30,6 +35,7 @@ const Dashboard = () => {
     icon: BarChart3,
     color: "text-purple-600"
   }];
+
   const quickActions = [{
     name: 'Gestion des restaurants',
     action: () => navigate('/restaurants'),
@@ -47,6 +53,7 @@ const Dashboard = () => {
     action: () => navigate('/notifications'),
     icon: Bell
   }];
+
   const recentActivity = [{
     action: "Nouveau restaurant ajouté",
     time: "Il y a 2h",
@@ -64,7 +71,46 @@ const Dashboard = () => {
     time: "Il y a 8h",
     type: "success"
   }];
-  return <div className="min-h-screen bg-gray-50 p-6">
+
+  // Créer la liste des éléments de gestion avec les comptes réels
+  const managementItems = [
+    {
+      name: 'Restaurants',
+      path: '/restaurants',
+      count: stats?.restaurants || 0
+    }, {
+      name: 'Concerts',
+      path: '/concerts',
+      count: stats?.concerts || 0
+    }, {
+      name: 'Hébergements',
+      path: '/accommodations',
+      count: stats?.accommodations || 0
+    }, {
+      name: 'Activités',
+      path: '/activities',
+      count: stats?.activities || 0
+    }, {
+      name: 'Loisirs',
+      path: '/loisirs',
+      count: stats?.loisirs || 0
+    }, {
+      name: 'Vie nocturne',
+      path: '/nightlife',
+      count: stats?.nightlife || 0
+    }, {
+      name: 'Voyages',
+      path: '/travel-offers',
+      count: stats?.travelOffers || 0
+    }, {
+      name: 'Promotions',
+      path: '/promotions',
+      count: stats?.promotions || 0
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -74,7 +120,8 @@ const Dashboard = () => {
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => <Card key={index} className="hover:shadow-lg transition-shadow">
+          {statCards.map((stat, index) => (
+            <Card key={index} className="hover:shadow-lg transition-shadow">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium text-gray-600">
                   {stat.title}
@@ -87,59 +134,36 @@ const Dashboard = () => {
                   {stat.change} depuis le mois dernier
                 </p>
               </CardContent>
-            </Card>)}
+            </Card>
+          ))}
         </div>
-
-        
 
         {/* Management Grid */}
         <div className="mt-8 mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">Gestion des contenus</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {[{
-            name: 'Restaurants',
-            path: '/restaurants',
-            count: 45
-          }, {
-            name: 'Concerts',
-            path: '/concerts',
-            count: 23
-          }, {
-            name: 'Hébergements',
-            path: '/accommodations',
-            count: 67
-          }, {
-            name: 'Activités',
-            path: '/activities',
-            count: 34
-          }, {
-            name: 'Loisirs',
-            path: '/loisirs',
-            count: 28
-          }, {
-            name: 'Vie nocturne',
-            path: '/nightlife',
-            count: 19
-          }, {
-            name: 'Voyages',
-            path: '/travel-offers',
-            count: 12
-          }, {
-            name: 'Promotions',
-            path: '/promotions',
-            count: 8
-          }].map((item, index) => <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer" onClick={() => navigate(item.path)}>
+            {managementItems.map((item, index) => (
+              <Card 
+                key={index} 
+                className="hover:shadow-md transition-shadow cursor-pointer" 
+                onClick={() => navigate(item.path)}
+              >
                 <CardContent className="p-4">
                   <div className="text-center">
                     <h3 className="font-medium text-gray-900">{item.name}</h3>
-                    <p className="text-2xl font-bold text-blue-600 mt-2">{item.count}</p>
+                    <p className="text-2xl font-bold text-blue-600 mt-2">
+                      {isLoading ? '...' : item.count}
+                    </p>
                     <p className="text-xs text-gray-500">éléments</p>
                   </div>
                 </CardContent>
-              </Card>)}
+              </Card>
+            ))}
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Dashboard;
