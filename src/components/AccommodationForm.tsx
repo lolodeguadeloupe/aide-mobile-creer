@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useCreateAccommodation, useUpdateAccommodation, Accommodation } from '@/hooks/useAccommodations';
@@ -90,10 +89,14 @@ const AccommodationForm: React.FC<AccommodationFormProps> = ({ accommodation, on
       onClose();
     } catch (error) {
       console.error('Erreur lors de la sauvegarde:', error);
+      if (error.message.includes('Refresh Token Not Found')) {
+        localStorage.clear();
+        window.location.href = '/login';
+      }
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number | string[] | Amenity[]) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

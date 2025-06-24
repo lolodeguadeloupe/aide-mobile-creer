@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,9 +5,22 @@ import { Edit, Trash2, MapPin, Calendar, Users } from 'lucide-react';
 import { useTravelOffers } from '@/hooks/useTravelOffers';
 import { useToast } from '@/hooks/use-toast';
 
+interface TravelOffer {
+  id: number;
+  title: string;
+  image?: string;
+  departure_location: string;
+  destination: string;
+  duration_days: number;
+  current_participants?: number;
+  max_participants: number;
+  price: number;
+  // Ajoute d'autres champs si nécessaire
+}
+
 interface TravelOffersListProps {
-  onEditTravelOffer: (travelOffer: any) => void;
-  travelOffers?: any[];
+  onEditTravelOffer: (travelOffer: TravelOffer) => void;
+  travelOffers?: TravelOffer[];
 }
 
 const TravelOffersList: React.FC<TravelOffersListProps> = ({ onEditTravelOffer, travelOffers: propTravelOffers }) => {
@@ -19,7 +31,7 @@ const TravelOffersList: React.FC<TravelOffersListProps> = ({ onEditTravelOffer, 
   // Use prop travel offers if provided, otherwise use fetched travel offers
   const travelOffers = propTravelOffers || fetchedTravelOffers;
 
-  const handleEdit = (travelOffer: any) => {
+  const handleEdit = (travelOffer: TravelOffer) => {
     console.log('Editing travel offer:', travelOffer);
     // Ensure we have a valid travel offer with an ID
     if (!travelOffer || !travelOffer.id) {
