@@ -10,6 +10,7 @@ export const useDashboardStats = () => {
       const [
         restaurantsCount,
         concertsCount,
+        carRentalsCount,
         accommodationsCount,
         activitiesCount,
         leisureActivitiesCount,
@@ -21,6 +22,7 @@ export const useDashboardStats = () => {
       ] = await Promise.all([
         supabase.from('restaurants').select('*', { count: 'exact', head: true }),
         supabase.from('concerts').select('*', { count: 'exact', head: true }),
+        supabase.from('car_models').select('*', { count: 'exact', head: true }),
         supabase.from('accommodations').select('*', { count: 'exact', head: true }),
         supabase.from('activities').select('*', { count: 'exact', head: true }),
         supabase.from('leisure_activities').select('*', { count: 'exact', head: true }),
@@ -34,6 +36,7 @@ export const useDashboardStats = () => {
       return {
         restaurants: restaurantsCount.count || 0,
         concerts: concertsCount.count || 0,
+        carRentals: carRentalsCount.count || 0,
         accommodations: accommodationsCount.count || 0,
         activities: activitiesCount.count || 0,
         leisureActivities: leisureActivitiesCount.count || 0,
