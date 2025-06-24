@@ -37,6 +37,29 @@ const BonsPlansList: React.FC<BonsPlansListProps> = ({
     }
   };
 
+  const constructFullUrl = (planUrl: string) => {
+    if (!planUrl) return '';
+    
+    const baseUrl = 'https://demonstration.clubcreole.fr/';
+    
+    // If the URL already starts with http, return as is
+    if (planUrl.startsWith('http')) {
+      return planUrl;
+    }
+    
+    // Remove leading slash if present to avoid double slashes
+    const cleanUrl = planUrl.startsWith('/') ? planUrl.slice(1) : planUrl;
+    
+    return baseUrl + cleanUrl;
+  };
+
+  const handleViewPlan = (planUrl: string) => {
+    const fullUrl = constructFullUrl(planUrl);
+    if (fullUrl) {
+      window.open(fullUrl, '_blank');
+    }
+  };
+
   if (filteredPlans.length === 0) {
     return (
       <div className="text-center py-8">
@@ -121,10 +144,15 @@ const BonsPlansList: React.FC<BonsPlansListProps> = ({
                 </div>
                 
                 {plan.url && (
-                  <div className="flex items-center text-blue-600 text-sm">
+                  <Button
+                    onClick={() => handleViewPlan(plan.url)}
+                    variant="ghost"
+                    size="sm"
+                    className="flex items-center text-blue-600 hover:text-blue-800 text-sm"
+                  >
                     <ExternalLink size={14} className="mr-1" />
-                    <span className="truncate max-w-32">Voir le plan</span>
-                  </div>
+                    Voir le plan
+                  </Button>
                 )}
               </div>
             </div>
