@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCarModels } from '@/hooks/useCarModels';
@@ -21,7 +22,7 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
     seats: 5,
     air_con: true,
     price_per_day: 0,
-    company_id: 0,
+    company_id: '',
     image: '',
     gallery_images: [] as string[],
     is_active: true,
@@ -39,7 +40,7 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
         seats: carRental.seats || 5,
         air_con: carRental.air_con ?? true,
         price_per_day: carRental.price_per_day || 0,
-        company_id: carRental.company_id || 0,
+        company_id: carRental.company_id || '',
         image: carRental.image || '',
         gallery_images: carRental.gallery_images || [],
         is_active: carRental.is_active ?? true,

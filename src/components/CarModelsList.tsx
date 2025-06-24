@@ -19,7 +19,7 @@ const CarModelsList: React.FC<CarModelsListProps> = ({ onEditCarModel }) => {
   const filteredCarModels = carModels?.filter(carModel =>
     carModel.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     carModel.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    carModel.car_rental_companies?.name?.toLowerCase().includes(searchTerm.toLowerCase())
+    carModel.partners?.business_name?.toLowerCase().includes(searchTerm.toLowerCase())
   ) || [];
 
   const handleDelete = async (id: number) => {
@@ -95,8 +95,8 @@ const CarModelsList: React.FC<CarModelsListProps> = ({ onEditCarModel }) => {
                           <p><span className="font-medium">Transmission:</span> {carModel.transmission}</p>
                           <p><span className="font-medium">Places:</span> {carModel.seats}</p>
                           <p><span className="font-medium">Prix par jour:</span> {carModel.price_per_day}€</p>
-                          {carModel.car_rental_companies && (
-                            <p><span className="font-medium">Compagnie:</span> {carModel.car_rental_companies.name}</p>
+                          {carModel.partners && (
+                            <p><span className="font-medium">Compagnie:</span> {carModel.partners.business_name}</p>
                           )}
                           <p>
                             <span className="font-medium">Climatisation:</span>
