@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRestaurants } from '@/hooks/useRestaurants';
@@ -6,8 +5,22 @@ import FormHeader from './FormHeader';
 import RestaurantBasicInfoSection from './RestaurantBasicInfoSection';
 import RestaurantImagesSection from './RestaurantImagesSection';
 
+interface Restaurant {
+  name: string;
+  type: string;
+  location: string;
+  description: string;
+  offer: string;
+  rating: number;
+  poids: number;
+  icon: string;
+  image?: string;
+  gallery_images?: string[];
+  id?: string | number;
+}
+
 interface RestaurantFormProps {
-  restaurant?: any;
+  restaurant?: Restaurant;
   onClose: () => void;
 }
 
@@ -45,7 +58,7 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
     }
   }, [restaurant]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

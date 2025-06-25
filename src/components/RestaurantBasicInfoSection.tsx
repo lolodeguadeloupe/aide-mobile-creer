@@ -12,7 +12,7 @@ interface RestaurantBasicInfoSectionProps {
     icon: string;
     poids: number;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: string | number) => void;
 }
 
 const RestaurantBasicInfoSection: React.FC<RestaurantBasicInfoSectionProps> = ({ 
