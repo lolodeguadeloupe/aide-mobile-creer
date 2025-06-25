@@ -21,6 +21,7 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
     description: '',
     offer: '',
     rating: 0,
+    poids: 0,
     icon: 'utensils'
   });
   
@@ -36,6 +37,7 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
         description: restaurant.description || '',
         offer: restaurant.offer || '',
         rating: restaurant.rating || 0,
+        poids: restaurant.poids || 0,
         icon: restaurant.icon || 'utensils'
       });
       setMainImage(restaurant.image || '');

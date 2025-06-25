@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Input } from '@/components/ui/input';
 
@@ -11,6 +10,7 @@ interface RestaurantBasicInfoSectionProps {
     offer: string;
     rating: number;
     icon: string;
+    poids: number;
   };
   onInputChange: (field: string, value: any) => void;
 }
@@ -101,6 +101,19 @@ const RestaurantBasicInfoSection: React.FC<RestaurantBasicInfoSectionProps> = ({
             value={formData.rating}
             onChange={(e) => onInputChange('rating', parseFloat(e.target.value) || 0)}
             placeholder="4.5"
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Poids (ordre d'affichage)
+          </label>
+          <Input
+            type="number"
+            min="0"
+            value={formData.poids}
+            onChange={(e) => onInputChange('poids', parseInt(e.target.value) || 0)}
+            placeholder="0"
           />
         </div>
       </div>
