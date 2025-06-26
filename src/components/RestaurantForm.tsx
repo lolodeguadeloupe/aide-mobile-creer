@@ -4,6 +4,33 @@ import { useRestaurants } from '@/hooks/useRestaurants';
 import FormHeader from './FormHeader';
 import RestaurantBasicInfoSection from './RestaurantBasicInfoSection';
 import RestaurantImagesSection from './RestaurantImagesSection';
+import RestaurantMenusSection from './RestaurantMenusSection';
+
+export interface MenuItem {
+  name: string;
+  price: number;
+  description?: string;
+}
+
+export interface MenuCategory {
+  name: string;
+  items: MenuItem[];
+}
+
+export interface Restaurant {
+  name: string;
+  type: string;
+  location: string;
+  description: string;
+  offer: string;
+  rating: number;
+  poids: number;
+  icon: string;
+  image?: string;
+  gallery_images?: string[];
+  id?: string | number;
+  menus?: MenuCategory[];
+}
 
 export interface Restaurant {
   name: string;
@@ -40,6 +67,7 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
   
   const [mainImage, setMainImage] = useState('');
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
+  const [menus, setMenus] = useState<MenuCategory[]>(restaurant?.menus || []);
 
   useEffect(() => {
     if (restaurant) {
@@ -55,6 +83,7 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
       });
       setMainImage(restaurant.image || '');
       setGalleryImages(restaurant.gallery_images || []);
+      setMenus(restaurant.menus || []);
     }
   }, [restaurant]);
 
@@ -71,7 +100,8 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
     const restaurantData = {
       ...formData,
       image: mainImage,
-      gallery_images: galleryImages
+      gallery_images: galleryImages,
+      menus
     };
 
     try {
@@ -106,6 +136,11 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
           galleryImages={galleryImages}
           onMainImageChange={setMainImage}
           onGalleryImagesChange={setGalleryImages}
+        />
+        
+        <RestaurantMenusSection
+          menus={menus}
+          setMenus={setMenus}
         />
         
         {/* Actions */}
