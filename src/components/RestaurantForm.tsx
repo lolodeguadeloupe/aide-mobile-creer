@@ -5,7 +5,7 @@ import FormHeader from './FormHeader';
 import RestaurantBasicInfoSection from './RestaurantBasicInfoSection';
 import RestaurantImagesSection from './RestaurantImagesSection';
 
-interface Restaurant {
+export interface Restaurant {
   name: string;
   type: string;
   location: string;

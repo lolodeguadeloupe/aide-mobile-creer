@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { Restaurant } from '@/components/RestaurantForm';
 
 export const useRestaurants = () => {
   const queryClient = useQueryClient();
@@ -14,6 +15,7 @@ export const useRestaurants = () => {
       const { data, error } = await supabase
         .from('restaurants')
         .select('*')
+        .order('poids', { ascending: false })
         .order('name');
       
       if (error) throw error;
@@ -23,7 +25,7 @@ export const useRestaurants = () => {
 
   // Create restaurant
   const createRestaurant = useMutation({
-    mutationFn: async (restaurant: any) => {
+    mutationFn: async (restaurant: Restaurant) => {
       const { data, error } = await supabase
         .from('restaurants')
         .insert([restaurant])
@@ -51,7 +53,7 @@ export const useRestaurants = () => {
 
   // Update restaurant
   const updateRestaurant = useMutation({
-    mutationFn: async ({ id, ...restaurant }: any) => {
+    mutationFn: async ({ id, ...restaurant }: Restaurant) => {
       const { data, error } = await supabase
         .from('restaurants')
         .update(restaurant)

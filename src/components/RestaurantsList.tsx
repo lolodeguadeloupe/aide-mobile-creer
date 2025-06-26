@@ -6,9 +6,23 @@ import { Edit, Trash2, Star, MapPin } from 'lucide-react';
 import { useRestaurants } from '@/hooks/useRestaurants';
 import { useToast } from '@/hooks/use-toast';
 
+interface Restaurant {
+  name: string;
+  type: string;
+  location: string;
+  description: string;
+  offer: string;
+  rating: number;
+  poids: number;
+  icon: string;
+  image?: string;
+  gallery_images?: string[];
+  id?: string | number;
+}
+
 interface RestaurantsListProps {
-  onEditRestaurant: (restaurant: any) => void;
-  restaurants?: any[];
+  onEditRestaurant: (restaurant: Restaurant) => void;
+  restaurants?: Restaurant[];
 }
 
 const RestaurantsList: React.FC<RestaurantsListProps> = ({ onEditRestaurant, restaurants: propRestaurants }) => {
