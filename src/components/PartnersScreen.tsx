@@ -15,20 +15,14 @@ const PartnersScreen: React.FC = () => {
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Filter partners based on search term
   const filteredPartners = useMemo(() => {
     if (!partners) return [];
-    
-    if (!searchTerm.trim()) {
-      return partners;
-    }
-
     const searchLower = searchTerm.toLowerCase();
     return partners.filter(partner => 
-      partner.business_name?.toLowerCase().includes(searchLower) ||
-      partner.business_type?.toLowerCase().includes(searchLower) ||
-      partner.location?.toLowerCase().includes(searchLower) ||
-      partner.description?.toLowerCase().includes(searchLower)
+      (partner.business_name?.toLowerCase().includes(searchLower)) ||
+      (partner.business_type?.toLowerCase().includes(searchLower)) ||
+      (partner.location?.toLowerCase().includes(searchLower)) ||
+      (partner.description?.toLowerCase().includes(searchLower))
     );
   }, [partners, searchTerm]);
 
@@ -39,7 +33,11 @@ const PartnersScreen: React.FC = () => {
 
   const handleDelete = async (id: number) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?')) {
-      deletePartner.mutate(id);
+      try {
+        await deletePartner.mutateAsync(id);
+      } catch (error) {
+        console.error("Erreur lors de la suppression du partenaire", error);
+      }
     }
   };
 
@@ -144,17 +142,15 @@ const PartnersScreen: React.FC = () => {
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <div className="flex items-center mb-2">
-                      <div className="flex items-center mb-2">
                       <img
                         src={partner.image || '/placeholder.svg'}
                         alt={partner.business_name}
-                        className="w-16 h-16 rounded-lg object-cover mr-3"
+                        className="w-16 h-16 rounded-lg object-cover mr-4"
                         onError={(e) => {
-                          const target = e.target as HTMLImageElement;
-                          target.src = '/placeholder.svg';
+                          e.currentTarget.src = '/placeholder.svg';
                         }}
                       />
-                      <div>
+                      <div className="flex-1">
                         <h3 className="text-lg font-semibold text-gray-900">
                           {partner.business_name}
                         </h3>
@@ -162,15 +158,13 @@ const PartnersScreen: React.FC = () => {
                         <p className="text-sm text-gray-500">{partner.location}</p>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 mb-2">
-                      <div>Offre: {partner.offer}</div>
-                      <div>Note: {partner.rating}/5</div>
+                    <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 my-3">
+                        <div><span className="font-semibold">Offre:</span> {partner.offer}</div>
+                        <div><span className="font-semibold">Note:</span> {partner.rating}/5</div>
                     </div>
                     <p className="text-sm text-gray-700 line-clamp-2">
                       {partner.description}
                     </p>
-                    </div>
-                    
                   </div>
                   <div className="flex flex-col gap-2 ml-4">
                     <Button

@@ -77,7 +77,7 @@ export const usePartners = () => {
         .from('partners')
         .select('*')
         .order('weight', { ascending: false })
-        .order('name');
+        .order('business_name');
       
       if (error) throw error;
       return data ? data.map(convertToPartner) : [];
