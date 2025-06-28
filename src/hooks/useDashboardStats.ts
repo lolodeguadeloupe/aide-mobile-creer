@@ -18,7 +18,8 @@ export const useDashboardStats = () => {
         nightlifeCount,
         travelOffersCount,
         promotionsCount,
-        bonsPlansCount
+        bonsPlansCount,
+        partnersCount
       ] = await Promise.all([
         supabase.from('restaurants').select('*', { count: 'exact', head: true }),
         supabase.from('concerts').select('*', { count: 'exact', head: true }),
@@ -30,7 +31,8 @@ export const useDashboardStats = () => {
         supabase.from('nightlife_events').select('*', { count: 'exact', head: true }),
         supabase.from('travel_offers').select('*', { count: 'exact', head: true }),
         supabase.from('promotions').select('*', { count: 'exact', head: true }),
-        supabase.from('bons_plans').select('*', { count: 'exact', head: true })
+        supabase.from('bons_plans').select('*', { count: 'exact', head: true }),
+        supabase.from('partners').select('*', { count: 'exact', head: true })
       ]);
 
       return {
@@ -44,7 +46,8 @@ export const useDashboardStats = () => {
         nightlife: nightlifeCount.count || 0,
         travelOffers: travelOffersCount.count || 0,
         promotions: promotionsCount.count || 0,
-        bonsPlans: bonsPlansCount.count || 0
+        bonsPlans: bonsPlansCount.count || 0,
+        partners: partnersCount.count || 0
       };
     }
   });

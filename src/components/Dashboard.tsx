@@ -122,6 +122,11 @@ const Dashboard = () => {
       name: 'Bons Plans',
       path: '/bons-plans',
       count: stats?.bonsPlans || 0
+    },
+    {
+      name: 'Partenaires',
+      path: '/partners',
+      count: stats?.partners || 0
     }
   ];
 
