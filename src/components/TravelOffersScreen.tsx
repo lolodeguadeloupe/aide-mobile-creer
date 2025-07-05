@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -42,6 +41,10 @@ const TravelOffersScreen = () => {
     setShowForm(true);
   };
 
+  /**
+   * Resets the component state so that the travel offer form is not shown,
+   * and there is no travel offer being edited.
+   */
   const handleCloseForm = () => {
     setShowForm(false);
     setEditingTravelOffer(null);

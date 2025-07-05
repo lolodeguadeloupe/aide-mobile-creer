@@ -1,19 +1,22 @@
-
 import React, { useState, useMemo } from 'react';
 import { Plus, Edit, Trash2, ArrowLeft, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useNavigate } from 'react-router-dom';
-import { usePartners, useDeletePartner, Partner } from '@/hooks/usePartners';
+import { usePartners, useDeletePartner, useCreatePartner, useUsers, Partner } from '@/hooks/usePartners';
 import PartnerForm from './PartnerForm';
+
 
 const PartnersScreen: React.FC = () => {
   const navigate = useNavigate();
-  const { data: partners, isLoading, error } = usePartners();
+  const { data: partners, isLoading: partnersLoading, error } = usePartners();
+  const { data: users } = useUsers();
   const deletePartner = useDeletePartner();
+  const createPartner = useCreatePartner();
   const [showForm, setShowForm] = useState(false);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+
 
   const filteredPartners = useMemo(() => {
     if (!partners) return [];
@@ -31,7 +34,7 @@ const PartnersScreen: React.FC = () => {
     setShowForm(true);
   };
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: string) => {
     if (window.confirm('Êtes-vous sûr de vouloir supprimer ce partenaire ?')) {
       try {
         await deletePartner.mutateAsync(id);
@@ -46,16 +49,25 @@ const PartnersScreen: React.FC = () => {
     setEditingPartner(null);
   };
 
+  const handleCreatePartner = async (data: Partial<Partner>) => {
+    try {
+      await createPartner.mutateAsync(data as Omit<Partner, 'id' | 'created_at' | 'updated_at'>);
+    } catch (error) {
+      console.error("Erreur lors de la création du partenaire", error);
+    }
+  };
+
   if (showForm) {
     return (
       <PartnerForm
         partner={editingPartner}
         onClose={handleCloseForm}
+        onCreate={handleCreatePartner}
       />
     );
   }
 
-  if (isLoading) {
+  if (partnersLoading) {
     return (
       <div className="min-h-screen bg-gray-50 p-4">
         <div className="flex justify-center items-center h-64">
@@ -134,10 +146,11 @@ const PartnersScreen: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredPartners?.map((partner) => (
+            {filteredPartners?.map((partner: Partner) => (
               <div
                 key={partner.id}
-                className="bg-white rounded-lg shadow-sm border border-gray-200 p-4"
+                className="bg-white rounded-lg shadow-sm border border-gray-200 p-4 cursor-pointer hover:shadow-md transition-shadow"
+                onClick={() => navigate(`/partners/${partner.id}`)}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -161,6 +174,13 @@ const PartnersScreen: React.FC = () => {
                     <div className="grid grid-cols-2 gap-4 text-sm text-gray-600 my-3">
                         <div><span className="font-semibold">Offre:</span> {partner.offer}</div>
                         <div><span className="font-semibold">Note:</span> {partner.rating}/5</div>
+                        {partner.user_id && (
+                          <div className="col-span-2">
+                            <span className="font-semibold">Utilisateur:</span> {
+                              users?.find(u => u.id === partner.user_id)?.email || 'Utilisateur introuvable'
+                            }
+                          </div>
+                        )}
                     </div>
                     <p className="text-sm text-gray-700 line-clamp-2">
                       {partner.description}
@@ -170,14 +190,20 @@ const PartnersScreen: React.FC = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleEdit(partner)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEdit(partner);
+                      }}
                     >
                       <Edit size={16} />
                     </Button>
                     <Button
                       size="sm"
                       variant="outline"
-                      onClick={() => handleDelete(partner.id)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDelete(partner.id);
+                      }}
                       className="text-red-600 hover:text-red-700"
                     >
                       <Trash2 size={16} />

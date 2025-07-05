@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useRestaurants } from '@/hooks/useRestaurants';
+import { usePartners, Partner } from '@/hooks/usePartners';
 import FormHeader from './FormHeader';
 import RestaurantBasicInfoSection from './RestaurantBasicInfoSection';
 import RestaurantImagesSection from './RestaurantImagesSection';
@@ -30,20 +31,7 @@ export interface Restaurant {
   gallery_images?: string[];
   id?: string | number;
   menus?: MenuCategory[];
-}
-
-export interface Restaurant {
-  name: string;
-  type: string;
-  location: string;
-  description: string;
-  offer: string;
-  rating: number;
-  poids: number;
-  icon: string;
-  image?: string;
-  gallery_images?: string[];
-  id?: string | number;
+  partner_id?: number | null;
 }
 
 interface RestaurantFormProps {
@@ -53,6 +41,7 @@ interface RestaurantFormProps {
 
 const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) => {
   const { createRestaurant, updateRestaurant, isCreating, isUpdating } = useRestaurants();
+  const { data: partners, isLoading: partnersLoading } = usePartners();
   
   const [formData, setFormData] = useState({
     name: '',
@@ -62,7 +51,8 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
     offer: '',
     rating: 0,
     poids: 0,
-    icon: 'utensils'
+    icon: 'utensils',
+    partner_id: null as number | null
   });
   
   const [mainImage, setMainImage] = useState('');
@@ -79,7 +69,8 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
         offer: restaurant.offer || '',
         rating: restaurant.rating || 0,
         poids: restaurant.poids || 0,
-        icon: restaurant.icon || 'utensils'
+        icon: restaurant.icon || 'utensils',
+        partner_id: restaurant.partner_id || null
       });
       setMainImage(restaurant.image || '');
       setGalleryImages(restaurant.gallery_images || []);
@@ -87,7 +78,7 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
     }
   }, [restaurant]);
 
-  const handleInputChange = (field: string, value: string | number) => {
+  const handleInputChange = (field: string, value: string | number | null) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
@@ -130,6 +121,26 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
           formData={formData}
           onInputChange={handleInputChange}
         />
+        
+        <div className="mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Partenaire
+          </label>
+          <select
+            value={formData.partner_id || ''}
+            onChange={e => handleInputChange('partner_id', e.target.value ? Number(e.target.value) : null)}
+            className="input w-full"
+            required
+            disabled={partnersLoading}
+          >
+            <option value="">Sélectionner un partenaire</option>
+            {partners?.map((partner: Partner) => (
+              <option key={partner.id} value={partner.id}>
+                {partner.business_name}
+              </option>
+            ))}
+          </select>
+        </div>
         
         <RestaurantImagesSection
           mainImage={mainImage}

@@ -15,6 +15,7 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PromotionsScreen from './components/PromotionsScreen';
 import BonsPlansScreen from './components/BonsPlansScreen';
 import PartnersScreen from './components/PartnersScreen';
+import PartnerDetail from './components/PartnerDetail';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/promotions" element={<PromotionsScreen />} />
         <Route path="/bons-plans" element={<BonsPlansScreen />} />
         <Route path="/partners" element={<PartnersScreen />} />
+        <Route path="/partners/:id" element={<PartnerDetail />} />
       </Routes>
       <PWAInstallPrompt />
     </div>

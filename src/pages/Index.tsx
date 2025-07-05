@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import AuthScreen from '@/components/AuthScreen';
 import Dashboard from '@/components/Dashboard';
 import SignOutButton from '@/components/SignOutButton';

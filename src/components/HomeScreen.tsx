@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { UtensilsCrossed, Music, Moon, Gamepad2, Building, Car, MapPin, Plane, Percent, Gift } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 

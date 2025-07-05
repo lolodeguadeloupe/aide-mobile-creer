@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '@/contexts/useAuth';
 import { toast } from 'sonner';
 
 const SignOutButton: React.FC = () => {
