@@ -130,7 +130,6 @@ const RestaurantForm: React.FC<RestaurantFormProps> = ({ restaurant, onClose }) 
             value={formData.partner_id || ''}
             onChange={e => handleInputChange('partner_id', e.target.value ? Number(e.target.value) : null)}
             className="input w-full"
-            required
             disabled={partnersLoading}
           >
             <option value="">Sélectionner un partenaire</option>
