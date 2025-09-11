@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type TravelOffer = Tables<'travel_offers'>;
+type TravelOfferInsert = TablesInsert<'travel_offers'>;
+type TravelOfferUpdate = TablesUpdate<'travel_offers'>;
+
+interface UpdateTravelOfferInput extends TravelOfferUpdate {
+  id: number;
+}
 
 export const useTravelOffers = () => {
   const queryClient = useQueryClient();
@@ -28,7 +37,7 @@ export const useTravelOffers = () => {
 
   // Create travel offer
   const createTravelOfferMutation = useMutation({
-    mutationFn: async (travelOfferData: any) => {
+    mutationFn: async (travelOfferData: TravelOfferInsert) => {
       console.log('Creating travel offer:', travelOfferData);
       
       // Check if user is authenticated
@@ -54,7 +63,7 @@ export const useTravelOffers = () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
       toast.success('Offre de voyage créée avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la création de l\'offre de voyage:', error);
       const errorMessage = error.message || 'Erreur lors de la création de l\'offre de voyage';
       toast.error(errorMessage);
@@ -63,7 +72,7 @@ export const useTravelOffers = () => {
 
   // Update travel offer
   const updateTravelOfferMutation = useMutation({
-    mutationFn: async ({ id, ...travelOfferData }: any) => {
+    mutationFn: async ({ id, ...travelOfferData }: UpdateTravelOfferInput) => {
       console.log('Updating travel offer with ID:', id);
       console.log('Travel offer data:', travelOfferData);
       
@@ -92,7 +101,7 @@ export const useTravelOffers = () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
       toast.success('Offre de voyage modifiée avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la modification de l\'offre de voyage:', error);
       const errorMessage = error.message || 'Erreur lors de la modification de l\'offre de voyage';
       toast.error(errorMessage);
@@ -149,7 +158,7 @@ export const useTravelOffers = () => {
       queryClient.invalidateQueries({ queryKey: ['travel-offers'] });
       toast.success('Offre de voyage supprimée avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la suppression de l\'offre de voyage:', error);
       const errorMessage = error.message || 'Erreur lors de la suppression de l\'offre de voyage';
       toast.error(errorMessage);

@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type Promotion = Tables<'promotions'>;
+type PromotionInsert = TablesInsert<'promotions'>;
+type PromotionUpdate = TablesUpdate<'promotions'>;
+
+interface UpdatePromotionInput extends PromotionUpdate {
+  id: number;
+}
 
 export const usePromotions = () => {
   const queryClient = useQueryClient();
@@ -27,7 +36,7 @@ export const usePromotions = () => {
 
   // Create promotion
   const createPromotionMutation = useMutation({
-    mutationFn: async (promotionData: any) => {
+    mutationFn: async (promotionData: PromotionInsert) => {
       console.log('Creating promotion:', promotionData);
       
       const { data, error } = await supabase
@@ -47,7 +56,7 @@ export const usePromotions = () => {
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       toast.success('Promotion créée avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la création de la promotion:', error);
       const errorMessage = error.message || 'Erreur lors de la création de la promotion';
       toast.error(errorMessage);
@@ -56,7 +65,7 @@ export const usePromotions = () => {
 
   // Update promotion
   const updatePromotionMutation = useMutation({
-    mutationFn: async ({ id, ...promotionData }: any) => {
+    mutationFn: async ({ id, ...promotionData }: UpdatePromotionInput) => {
       console.log('Updating promotion with ID:', id);
       console.log('Promotion data:', promotionData);
       
@@ -79,7 +88,7 @@ export const usePromotions = () => {
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       toast.success('Promotion modifiée avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la modification de la promotion:', error);
       const errorMessage = error.message || 'Erreur lors de la modification de la promotion';
       toast.error(errorMessage);
@@ -107,7 +116,7 @@ export const usePromotions = () => {
       queryClient.invalidateQueries({ queryKey: ['promotions'] });
       toast.success('Promotion supprimée avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la suppression de la promotion:', error);
       const errorMessage = error.message || 'Erreur lors de la suppression de la promotion';
       toast.error(errorMessage);

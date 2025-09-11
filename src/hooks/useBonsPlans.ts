@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type BonPlan = Tables<'bons_plans'>;
+type BonPlanInsert = TablesInsert<'bons_plans'>;
+type BonPlanUpdate = TablesUpdate<'bons_plans'>;
+
+interface UpdateBonPlanInput extends BonPlanUpdate {
+  id: number;
+}
 
 export const useBonsPlans = () => {
   const queryClient = useQueryClient();
@@ -27,7 +36,7 @@ export const useBonsPlans = () => {
 
   // Create bon plan
   const createBonPlanMutation = useMutation({
-    mutationFn: async (bonPlanData: any) => {
+    mutationFn: async (bonPlanData: BonPlanInsert) => {
       console.log('Creating bon plan:', bonPlanData);
       
       const { data, error } = await supabase
@@ -47,7 +56,7 @@ export const useBonsPlans = () => {
       queryClient.invalidateQueries({ queryKey: ['bons-plans'] });
       toast.success('Bon plan créé avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la création du bon plan:', error);
       const errorMessage = error.message || 'Erreur lors de la création du bon plan';
       toast.error(errorMessage);
@@ -56,7 +65,7 @@ export const useBonsPlans = () => {
 
   // Update bon plan
   const updateBonPlanMutation = useMutation({
-    mutationFn: async ({ id, ...bonPlanData }: any) => {
+    mutationFn: async ({ id, ...bonPlanData }: UpdateBonPlanInput) => {
       console.log('Updating bon plan with ID:', id);
       console.log('Bon plan data:', bonPlanData);
       
@@ -79,7 +88,7 @@ export const useBonsPlans = () => {
       queryClient.invalidateQueries({ queryKey: ['bons-plans'] });
       toast.success('Bon plan modifié avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la modification du bon plan:', error);
       const errorMessage = error.message || 'Erreur lors de la modification du bon plan';
       toast.error(errorMessage);
@@ -107,7 +116,7 @@ export const useBonsPlans = () => {
       queryClient.invalidateQueries({ queryKey: ['bons-plans'] });
       toast.success('Bon plan supprimé avec succès');
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la suppression du bon plan:', error);
       const errorMessage = error.message || 'Erreur lors de la suppression du bon plan';
       toast.error(errorMessage);

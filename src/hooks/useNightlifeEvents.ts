@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type NightlifeEvent = Tables<'nightlife_events'>;
+type NightlifeEventInsert = TablesInsert<'nightlife_events'>;
+type NightlifeEventUpdate = TablesUpdate<'nightlife_events'>;
+
+interface UpdateNightlifeEventInput extends NightlifeEventUpdate {
+  id: number;
+}
 
 export const useNightlifeEvents = () => {
   const queryClient = useQueryClient();
@@ -23,7 +32,7 @@ export const useNightlifeEvents = () => {
 
   // Create nightlife event
   const createEvent = useMutation({
-    mutationFn: async (event: any) => {
+    mutationFn: async (event: NightlifeEventInsert) => {
       const { data, error } = await supabase
         .from('nightlife_events')
         .insert([event])
@@ -51,7 +60,7 @@ export const useNightlifeEvents = () => {
 
   // Update nightlife event
   const updateEvent = useMutation({
-    mutationFn: async ({ id, ...event }: any) => {
+    mutationFn: async ({ id, ...event }: UpdateNightlifeEventInput) => {
       const { data, error } = await supabase
         .from('nightlife_events')
         .update(event)

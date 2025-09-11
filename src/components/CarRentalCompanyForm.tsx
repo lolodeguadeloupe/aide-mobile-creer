@@ -7,9 +7,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useCarRentalCompanies } from '@/hooks/useCarRentalCompanies';
 import ImageUploadManager from './ImageUploadManager';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Partner = Tables<'partners'>;
 
 interface CarRentalCompanyFormProps {
-  company?: any;
+  company?: Partner;
   onClose: () => void;
 }
 
@@ -70,7 +73,7 @@ const CarRentalCompanyForm: React.FC<CarRentalCompanyFormProps> = ({ company, on
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

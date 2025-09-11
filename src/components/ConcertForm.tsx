@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useConcerts } from '@/hooks/useConcerts';
 import FormHeader from './FormHeader';
+import type { Tables } from "@/integrations/supabase/types";
+
+type Concert = Tables<'concerts'>;
 import ConcertBasicInfoSection from './ConcertBasicInfoSection';
 import ConcertImagesSection from './ConcertImagesSection';
 
 interface ConcertFormProps {
-  concert?: any;
+  concert?: Concert;
   onClose: () => void;
 }
 
@@ -51,7 +54,7 @@ const ConcertForm: React.FC<ConcertFormProps> = ({ concert, onClose }) => {
     }
   }, [concert]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

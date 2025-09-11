@@ -3,6 +3,13 @@ import { ArrowLeft, Edit, Trash2, Phone, Globe, MapPin, Star, User } from 'lucid
 import { Button } from '@/components/ui/button';
 import { useNavigate, useParams } from 'react-router-dom';
 import { usePartners, useDeletePartner, useUsers } from '@/hooks/usePartners';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Partner = Tables<'partners'>;
+
+interface PartnerWithUserId extends Partner {
+  user_id?: string;
+}
 
 const PartnerDetail: React.FC = () => {
   const navigate = useNavigate();
@@ -12,8 +19,8 @@ const PartnerDetail: React.FC = () => {
   const deletePartner = useDeletePartner();
   
   const partner = partners?.find(p => p.id === id);
-  const assignedUser = partner && (partner as any).user_id 
-    ? users?.find(u => u.id === (partner as any).user_id)
+  const assignedUser = partner && (partner as PartnerWithUserId).user_id 
+    ? users?.find(u => u.id === (partner as PartnerWithUserId).user_id)
     : null;
 
   const handleDelete = async () => {

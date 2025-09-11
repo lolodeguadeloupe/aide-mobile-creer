@@ -8,20 +8,24 @@ import CarRentalCompaniesList from './CarRentalCompaniesList';
 import CarRentalCompanyForm from './CarRentalCompanyForm';
 import CarModelsList from './CarModelsList';
 import CarRentalForm from './CarRentalForm';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Partner = Tables<'partners'>;
+type CarModel = Tables<'car_models'>;
 
 const CarRentalsScreen = () => {
   const navigate = useNavigate();
   const [showCompanyForm, setShowCompanyForm] = useState(false);
   const [showModelForm, setShowModelForm] = useState(false);
-  const [editingCompany, setEditingCompany] = useState(null);
-  const [editingModel, setEditingModel] = useState(null);
+  const [editingCompany, setEditingCompany] = useState<Partner | null>(null);
+  const [editingModel, setEditingModel] = useState<CarModel | null>(null);
 
-  const handleEditCompany = (company: any) => {
+  const handleEditCompany = (company: Partner) => {
     setEditingCompany(company);
     setShowCompanyForm(true);
   };
 
-  const handleEditModel = (model: any) => {
+  const handleEditModel = (model: CarModel) => {
     setEditingModel(model);
     setShowModelForm(true);
   };

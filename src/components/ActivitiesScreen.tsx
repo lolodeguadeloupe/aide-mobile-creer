@@ -5,13 +5,16 @@ import { ArrowLeft, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import ActivitiesList from './ActivitiesList';
 import ActivityForm from './ActivityForm';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Activity = Tables<'activities'>;
 
 const ActivitiesScreen = () => {
   const navigate = useNavigate();
   const [showForm, setShowForm] = useState(false);
-  const [editingActivity, setEditingActivity] = useState(null);
+  const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
 
-  const handleEditActivity = (activity: any) => {
+  const handleEditActivity = (activity: Activity) => {
     setEditingActivity(activity);
     setShowForm(true);
   };

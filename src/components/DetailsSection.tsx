@@ -11,7 +11,7 @@ interface DetailsSectionProps {
     max_guests: number;
     discount: number;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const DetailsSection: React.FC<DetailsSectionProps> = ({ formData, onInputChange }) => {

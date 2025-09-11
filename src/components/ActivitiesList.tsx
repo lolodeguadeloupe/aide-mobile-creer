@@ -7,9 +7,12 @@ import { Switch } from '@/components/ui/switch';
 import { Edit, Trash2, Star, Search, Eye, EyeOff } from 'lucide-react';
 import { useActivities } from '@/hooks/useActivities';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
+
+type ActivityType = Tables<'activities'>;
 
 interface ActivitiesListProps {
-  onEditActivity: (activity: any) => void;
+  onEditActivity: (activity: ActivityType) => void;
 }
 
 const ActivitiesList: React.FC<ActivitiesListProps> = ({ onEditActivity }) => {
@@ -50,7 +53,7 @@ const ActivitiesList: React.FC<ActivitiesListProps> = ({ onEditActivity }) => {
     }
   };
 
-  const handleToggleActive = async (activity: any) => {
+  const handleToggleActive = async (activity: ActivityType) => {
     try {
       await updateActivity({
         id: activity.id,

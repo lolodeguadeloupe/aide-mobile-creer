@@ -4,10 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Star, MapPin, Calendar, Clock } from 'lucide-react';
 import { useConcerts } from '@/hooks/useConcerts';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Concert = Tables<'concerts'>;
 
 interface ConcertsListProps {
-  onEditConcert: (concert: any) => void;
-  concerts?: any[];
+  onEditConcert: (concert: Concert) => void;
+  concerts?: Concert[];
 }
 
 const ConcertsList: React.FC<ConcertsListProps> = ({ onEditConcert, concerts: propConcerts }) => {

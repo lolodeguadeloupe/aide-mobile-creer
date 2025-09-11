@@ -16,7 +16,7 @@ interface ConcertBasicInfoSectionProps {
     rating: number;
     icon: string;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const ConcertBasicInfoSection: React.FC<ConcertBasicInfoSectionProps> = ({ 

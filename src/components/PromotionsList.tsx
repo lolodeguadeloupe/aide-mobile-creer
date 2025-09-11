@@ -3,11 +3,14 @@ import React from 'react';
 import { Edit, Trash2, Eye, EyeOff, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { usePromotions } from '@/hooks/usePromotions';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Promotion = Tables<'promotions'>;
 
 interface PromotionsListProps {
   searchTerm?: string;
-  promotions?: any[];
-  onEditPromotion?: (promotion: any) => void;
+  promotions?: Promotion[];
+  onEditPromotion?: (promotion: Promotion) => void;
 }
 
 const PromotionsList: React.FC<PromotionsListProps> = ({ 

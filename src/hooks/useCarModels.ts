@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type CarModel = Tables<'car_models'>;
+type CarModelInsert = TablesInsert<'car_models'>;
+type CarModelUpdate = TablesUpdate<'car_models'>;
+
+interface UpdateCarModelInput extends CarModelUpdate {
+  id: number;
+}
 
 export const useCarModels = () => {
   const queryClient = useQueryClient();
@@ -29,7 +38,7 @@ export const useCarModels = () => {
 
   // Create car model
   const createModel = useMutation({
-    mutationFn: async (model: any) => {
+    mutationFn: async (model: CarModelInsert) => {
       const { data, error } = await supabase
         .from('car_models')
         .insert([model])
@@ -56,7 +65,7 @@ export const useCarModels = () => {
   });
 
   const updateModel = useMutation({
-    mutationFn: async ({ id, ...model }: any) => {
+    mutationFn: async ({ id, ...model }: UpdateCarModelInput) => {
       const { data, error } = await supabase
         .from('car_models')
         .update(model)

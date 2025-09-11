@@ -7,9 +7,12 @@ import { usePromotions } from '@/hooks/usePromotions';
 import FormHeader from './FormHeader';
 import PromotionBasicInfoSection from './PromotionBasicInfoSection';
 import PromotionImagesSection from './PromotionImagesSection';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Promotion = Tables<'promotions'>;
 
 interface PromotionFormProps {
-  promotion?: any;
+  promotion?: Promotion;
   onClose: () => void;
 }
 
@@ -50,7 +53,7 @@ const PromotionForm: React.FC<PromotionFormProps> = ({ promotion, onClose }) => 
     }
   }, [promotion]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

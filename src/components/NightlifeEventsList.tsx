@@ -5,9 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Edit, Trash2, Star, MapPin, Calendar, Clock } from 'lucide-react';
 import { useNightlifeEvents } from '@/hooks/useNightlifeEvents';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
+
+type NightlifeEvent = Tables<'nightlife_events'>;
 
 interface NightlifeEventsListProps {
-  onEditEvent: (event: any) => void;
+  onEditEvent: (event: NightlifeEvent) => void;
 }
 
 const NightlifeEventsList: React.FC<NightlifeEventsListProps> = ({ onEditEvent }) => {

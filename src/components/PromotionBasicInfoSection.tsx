@@ -16,7 +16,7 @@ interface PromotionBasicInfoSectionProps {
     sort_order: number;
     is_active: boolean;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const PromotionBasicInfoSection: React.FC<PromotionBasicInfoSectionProps> = ({

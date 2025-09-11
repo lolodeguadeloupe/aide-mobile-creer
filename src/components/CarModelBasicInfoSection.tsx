@@ -9,7 +9,7 @@ interface CarModelBasicInfoSectionProps {
     name: string;
     category: string;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const CarModelBasicInfoSection: React.FC<CarModelBasicInfoSectionProps> = ({

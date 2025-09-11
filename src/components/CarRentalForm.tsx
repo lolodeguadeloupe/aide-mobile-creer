@@ -8,9 +8,12 @@ import CarModelSpecsSection from './CarModelSpecsSection';
 import CarModelCompanySection from './CarModelCompanySection';
 import CarModelFormActions from './CarModelFormActions';
 import ImageUploadManager from './ImageUploadManager';
+import type { Tables } from '@/integrations/supabase/types';
+
+type CarModel = Tables<'car_models'>;
 
 interface CarRentalFormProps {
-  carRental?: any;
+  carRental?: CarModel;
   onClose: () => void;
 }
 
@@ -63,7 +66,7 @@ const CarRentalForm: React.FC<CarRentalFormProps> = ({ carRental, onClose }) => 
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

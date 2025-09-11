@@ -2,6 +2,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import type { Tables } from '@/integrations/supabase/types';
 
 interface Amenity {
   name: string;
@@ -28,7 +29,7 @@ export interface Accommodation {
 }
 
 // Helper function to convert database row to Accommodation
-const convertToAccommodation = (row: any): Accommodation => {
+const convertToAccommodation = (row: Tables<'accommodations'>): Accommodation => {
   return {
     id: row.id,
     name: row.name,
@@ -62,10 +63,10 @@ const convertToDbFormat = (accommodation: Omit<Accommodation, 'id'>) => {
     bathrooms: accommodation.bathrooms,
     max_guests: accommodation.max_guests,
     image: accommodation.image,
-    gallery_images: accommodation.gallery_images as any,
-    features: accommodation.features as any,
-    amenities: accommodation.amenities as any,
-    rules: accommodation.rules as any,
+    gallery_images: accommodation.gallery_images as string[],
+    features: accommodation.features as string[],
+    amenities: accommodation.amenities as Amenity[],
+    rules: accommodation.rules as string[],
     discount: accommodation.discount
   };
 };
@@ -104,7 +105,7 @@ export const useCreateAccommodation = () => {
       queryClient.invalidateQueries({ queryKey: ['accommodations'] });
       toast.success('Hébergement créé avec succès');
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la création:', error);
       toast.error('Erreur lors de la création de l\'hébergement');
     }
@@ -131,7 +132,7 @@ export const useUpdateAccommodation = () => {
       queryClient.invalidateQueries({ queryKey: ['accommodations'] });
       toast.success('Hébergement mis à jour avec succès');
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la mise à jour:', error);
       toast.error('Erreur lors de la mise à jour de l\'hébergement');
     }
@@ -154,7 +155,7 @@ export const useDeleteAccommodation = () => {
       queryClient.invalidateQueries({ queryKey: ['accommodations'] });
       toast.success('Hébergement supprimé avec succès');
     },
-    onError: (error) => {
+    onError: (error: Error) => {
       console.error('Erreur lors de la suppression:', error);
       toast.error('Erreur lors de la suppression de l\'hébergement');
     }

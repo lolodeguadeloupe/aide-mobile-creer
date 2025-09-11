@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useLoisirs } from '@/hooks/useLoisirs';
 import FormHeader from './FormHeader';
+import type { Tables } from "@/integrations/supabase/types";
+
+type Loisir = Tables<'loisirs'>;
 import LoisirBasicInfoSection from './LoisirBasicInfoSection';
 import LoisirImagesSection from './LoisirImagesSection';
 
 interface LoisirFormProps {
-  loisir?: any;
+  loisir?: Loisir;
   onClose: () => void;
 }
 
@@ -43,7 +46,7 @@ const LoisirForm: React.FC<LoisirFormProps> = ({ loisir, onClose }) => {
     }
   }, [loisir]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

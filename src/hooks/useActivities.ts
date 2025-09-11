@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type Activity = Tables<'activities'>;
+type ActivityInsert = TablesInsert<'activities'>;
+type ActivityUpdate = TablesUpdate<'activities'>;
+
+interface UpdateActivityInput extends ActivityUpdate {
+  id: number;
+}
 
 export const useActivities = () => {
   const queryClient = useQueryClient();
@@ -23,7 +32,7 @@ export const useActivities = () => {
 
   // Create activity
   const createActivity = useMutation({
-    mutationFn: async (activity: any) => {
+    mutationFn: async (activity: ActivityInsert) => {
       const { data, error } = await supabase
         .from('activities')
         .insert([activity])
@@ -50,7 +59,7 @@ export const useActivities = () => {
   });
 
   const updateActivity = useMutation({
-    mutationFn: async ({ id, ...activity }: any) => {
+    mutationFn: async ({ id, ...activity }: UpdateActivityInput) => {
       const { data, error } = await supabase
         .from('activities')
         .update(activity)

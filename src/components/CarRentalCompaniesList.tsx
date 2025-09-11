@@ -6,9 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Edit, Trash2, Search, Building } from 'lucide-react';
 import { useCarRentalCompanies } from '@/hooks/useCarRentalCompanies';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Partner = Tables<'partners'>;
 
 interface CarRentalCompaniesListProps {
-  onEditCompany: (company: any) => void;
+  onEditCompany: (company: Partner) => void;
 }
 
 const CarRentalCompaniesList: React.FC<CarRentalCompaniesListProps> = ({ onEditCompany }) => {

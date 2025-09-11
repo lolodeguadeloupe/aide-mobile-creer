@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type Loisir = Tables<'loisirs'>;
+type LoisirInsert = TablesInsert<'loisirs'>;
+type LoisirUpdate = TablesUpdate<'loisirs'>;
+
+interface UpdateLoisirInput extends LoisirUpdate {
+  id: number;
+}
 
 export const useLoisirs = () => {
   const queryClient = useQueryClient();
@@ -23,7 +32,7 @@ export const useLoisirs = () => {
 
   // Create loisir
   const createLoisir = useMutation({
-    mutationFn: async (loisir: any) => {
+    mutationFn: async (loisir: LoisirInsert) => {
       const { data, error } = await supabase
         .from('loisirs')
         .insert([loisir])
@@ -50,7 +59,7 @@ export const useLoisirs = () => {
   });
 
   const updateLoisir = useMutation({
-    mutationFn: async ({ id, ...loisir }: any) => {
+    mutationFn: async ({ id, ...loisir }: UpdateLoisirInput) => {
       const { data, error } = await supabase
         .from('loisirs')
         .update(loisir)

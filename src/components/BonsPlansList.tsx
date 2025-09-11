@@ -3,11 +3,14 @@ import React from 'react';
 import { Edit, Trash2, Eye, EyeOff, ExternalLink } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useBonsPlans } from '@/hooks/useBonsPlans';
+import type { Tables } from '@/integrations/supabase/types';
+
+type BonPlan = Tables<'bons_plans'>;
 
 interface BonsPlansListProps {
   searchTerm?: string;
-  bonsPlans?: any[];
-  onEditBonPlan?: (bonPlan: any) => void;
+  bonsPlans?: BonPlan[];
+  onEditBonPlan?: (bonPlan: BonPlan) => void;
 }
 
 const BonsPlansList: React.FC<BonsPlansListProps> = ({ 

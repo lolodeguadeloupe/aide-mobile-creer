@@ -6,9 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Edit, Trash2, Users, Calendar, MapPin, Search } from 'lucide-react';
 import { useLoisirs } from '@/hooks/useLoisirs';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Loisir = Tables<'loisirs'>;
 
 interface LoisirsListProps {
-  onEditLoisir: (loisir: any) => void;
+  onEditLoisir: (loisir: Loisir) => void;
 }
 
 const LoisirsList: React.FC<LoisirsListProps> = ({ onEditLoisir }) => {

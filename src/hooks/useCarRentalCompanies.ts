@@ -2,6 +2,21 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type Partner = Tables<'partners'>;
+type PartnerInsert = TablesInsert<'partners'>;
+type PartnerUpdate = TablesUpdate<'partners'>;
+
+interface CarRentalCompanyData {
+  name: string;
+  type: string;
+  [key: string]: unknown;
+}
+
+interface UpdateCarRentalCompanyInput extends CarRentalCompanyData {
+  id: string;
+}
 
 export const useCarRentalCompanies = () => {
   const queryClient = useQueryClient();
@@ -24,7 +39,7 @@ export const useCarRentalCompanies = () => {
 
   // Create car rental company
   const createCompany = useMutation({
-    mutationFn: async (company: any) => {
+    mutationFn: async (company: CarRentalCompanyData) => {
       const { data, error } = await supabase
         .from('partners')
         .insert([{
@@ -56,7 +71,7 @@ export const useCarRentalCompanies = () => {
   });
 
   const updateCompany = useMutation({
-    mutationFn: async ({ id, ...company }: any) => {
+    mutationFn: async ({ id, ...company }: UpdateCarRentalCompanyInput) => {
       const { data, error } = await supabase
         .from('partners')
         .update({

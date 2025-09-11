@@ -13,7 +13,7 @@ interface CarModelSpecsSectionProps {
     price_per_day: number;
     is_active: boolean;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const CarModelSpecsSection: React.FC<CarModelSpecsSectionProps> = ({

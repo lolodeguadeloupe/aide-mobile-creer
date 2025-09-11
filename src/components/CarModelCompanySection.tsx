@@ -2,13 +2,16 @@
 import React from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Partner = Tables<'partners'>;
 
 interface CarModelCompanySectionProps {
   formData: {
     company_id: string;
   };
-  companies: any[];
-  onInputChange: (field: string, value: any) => void;
+  companies: Partner[];
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const CarModelCompanySection: React.FC<CarModelCompanySectionProps> = ({

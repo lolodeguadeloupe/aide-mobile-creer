@@ -2,6 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import type { TablesInsert, TablesUpdate, Tables } from '@/integrations/supabase/types';
+
+type Concert = Tables<'concerts'>;
+type ConcertInsert = TablesInsert<'concerts'>;
+type ConcertUpdate = TablesUpdate<'concerts'>;
+
+interface UpdateConcertInput extends ConcertUpdate {
+  id: number;
+}
 
 export const useConcerts = () => {
   const queryClient = useQueryClient();
@@ -23,7 +32,7 @@ export const useConcerts = () => {
 
   // Create concert
   const createConcert = useMutation({
-    mutationFn: async (concert: any) => {
+    mutationFn: async (concert: ConcertInsert) => {
       const { data, error } = await supabase
         .from('concerts')
         .insert([concert])
@@ -51,7 +60,7 @@ export const useConcerts = () => {
 
   // Update concert
   const updateConcert = useMutation({
-    mutationFn: async ({ id, ...concert }: any) => {
+    mutationFn: async ({ id, ...concert }: UpdateConcertInput) => {
       const { data, error } = await supabase
         .from('concerts')
         .update(concert)

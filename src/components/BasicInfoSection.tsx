@@ -9,7 +9,7 @@ interface BasicInfoSectionProps {
     location: string;
     description: string;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const BasicInfoSection: React.FC<BasicInfoSectionProps> = ({ formData, onInputChange }) => {

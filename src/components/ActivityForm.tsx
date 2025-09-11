@@ -6,9 +6,12 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { useActivities } from '@/hooks/useActivities';
+import type { Tables } from '@/integrations/supabase/types';
+
+type Activity = Tables<'activities'>;
 
 interface ActivityFormProps {
-  activity?: any;
+  activity?: Activity;
   onClose: () => void;
 }
 
@@ -50,7 +53,7 @@ const ActivityForm: React.FC<ActivityFormProps> = ({ activity, onClose }) => {
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

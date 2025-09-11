@@ -15,7 +15,7 @@ interface NightlifeEventBasicInfoSectionProps {
     rating: number;
     features: string[];
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const NightlifeEventBasicInfoSection: React.FC<NightlifeEventBasicInfoSectionProps> = ({ 

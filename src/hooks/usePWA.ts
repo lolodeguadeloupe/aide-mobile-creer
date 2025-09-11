@@ -1,6 +1,14 @@
 
 import { useState, useEffect } from 'react';
 
+interface NavigatorWithGetInstalledRelatedApps extends Navigator {
+  getInstalledRelatedApps?: () => Promise<Array<Record<string, unknown>>>;
+}
+
+interface WindowWithStandalone extends Window {
+  navigator: NavigatorWithGetInstalledRelatedApps;
+}
+
 export const usePWA = () => {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
@@ -9,7 +17,7 @@ export const usePWA = () => {
     // Vérifier si l'app est en mode standalone (installée)
     const checkStandalone = () => {
       const isStandaloneMode = window.matchMedia('(display-mode: standalone)').matches ||
-                              (window.navigator as any).standalone ||
+                              (window.navigator as NavigatorWithGetInstalledRelatedApps & { standalone?: boolean }).standalone ||
                               document.referrer.includes('android-app://');
       setIsStandalone(isStandaloneMode);
     };
@@ -31,7 +39,7 @@ export const usePWA = () => {
 
     // Vérifier si l'app est installée
     if ('getInstalledRelatedApps' in navigator) {
-      (navigator as any).getInstalledRelatedApps().then((relatedApps: any[]) => {
+      (navigator as NavigatorWithGetInstalledRelatedApps).getInstalledRelatedApps!().then((relatedApps: Array<Record<string, unknown>>) => {
         setIsInstalled(relatedApps.length > 0);
       });
     }

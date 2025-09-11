@@ -3,9 +3,25 @@ import React from 'react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
+interface TravelOfferFormData {
+  title: string;
+  destination: string;
+  departure_location: string;
+  description: string;
+  price: number;
+  duration_days: number;
+  departure_date: string;
+  return_date: string;
+  max_participants: number;
+  current_participants: number;
+  inclusions: unknown[];
+  exclusions: unknown[];
+  is_active: boolean;
+}
+
 interface TravelOfferBasicInfoSectionProps {
-  formData: any;
-  onInputChange: (field: string, value: any) => void;
+  formData: TravelOfferFormData;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const TravelOfferBasicInfoSection: React.FC<TravelOfferBasicInfoSectionProps> = ({

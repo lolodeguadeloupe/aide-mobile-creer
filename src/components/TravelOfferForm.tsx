@@ -5,9 +5,28 @@ import { useTravelOffers } from '@/hooks/useTravelOffers';
 import FormHeader from './FormHeader';
 import TravelOfferBasicInfoSection from './TravelOfferBasicInfoSection';
 import TravelOfferImagesSection from './TravelOfferImagesSection';
+import type { Tables } from '@/integrations/supabase/types';
+
+type TravelOffer = Tables<'travel_offers'>;
+
+interface TravelOfferFormData {
+  title: string;
+  destination: string;
+  departure_location: string;
+  description: string;
+  price: number;
+  duration_days: number;
+  departure_date: string;
+  return_date: string;
+  max_participants: number;
+  current_participants: number;
+  inclusions: unknown[];
+  exclusions: unknown[];
+  is_active: boolean;
+}
 
 interface TravelOfferFormProps {
-  travelOffer?: any;
+  travelOffer?: TravelOffer;
   onClose: () => void;
 }
 
@@ -59,7 +78,7 @@ const TravelOfferForm: React.FC<TravelOfferFormProps> = ({ travelOffer, onClose 
     }
   }, [travelOffer]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

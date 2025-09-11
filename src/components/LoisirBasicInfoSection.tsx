@@ -12,7 +12,7 @@ interface LoisirBasicInfoSectionProps {
     max_participants: number;
     current_participants: number;
   };
-  onInputChange: (field: string, value: any) => void;
+  onInputChange: (field: string, value: unknown) => void;
 }
 
 const LoisirBasicInfoSection: React.FC<LoisirBasicInfoSectionProps> = ({ 

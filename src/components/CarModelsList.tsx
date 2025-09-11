@@ -6,9 +6,12 @@ import { Input } from '@/components/ui/input';
 import { Edit, Trash2, Search, Car } from 'lucide-react';
 import { useCarModels } from '@/hooks/useCarModels';
 import { useToast } from '@/hooks/use-toast';
+import type { Tables } from '@/integrations/supabase/types';
+
+type CarModel = Tables<'car_models'>;
 
 interface CarModelsListProps {
-  onEditCarModel: (carModel: any) => void;
+  onEditCarModel: (carModel: CarModel) => void;
 }
 
 const CarModelsList: React.FC<CarModelsListProps> = ({ onEditCarModel }) => {

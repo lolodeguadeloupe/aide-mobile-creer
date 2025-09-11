@@ -3,11 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { useNightlifeEvents } from '@/hooks/useNightlifeEvents';
 import FormHeader from './FormHeader';
+import type { Tables } from "@/integrations/supabase/types";
+
+type NightlifeEvent = Tables<'nightlife_events'>;
 import NightlifeEventBasicInfoSection from './NightlifeEventBasicInfoSection';
 import NightlifeEventImagesSection from './NightlifeEventImagesSection';
 
 interface NightlifeEventFormProps {
-  event?: any;
+  event?: NightlifeEvent;
   onClose: () => void;
 }
 
@@ -49,7 +52,7 @@ const NightlifeEventForm: React.FC<NightlifeEventFormProps> = ({ event, onClose 
     }
   }, [event]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value

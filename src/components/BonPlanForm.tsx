@@ -6,9 +6,12 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { useBonsPlans } from '@/hooks/useBonsPlans';
 import FormHeader from './FormHeader';
+import type { Tables } from '@/integrations/supabase/types';
+
+type BonPlan = Tables<'bons_plans'>;
 
 interface BonPlanFormProps {
-  bonPlan?: any;
+  bonPlan?: BonPlan;
   onClose: () => void;
 }
 
@@ -45,7 +48,7 @@ const BonPlanForm: React.FC<BonPlanFormProps> = ({ bonPlan, onClose }) => {
     }
   }, [bonPlan]);
 
-  const handleInputChange = (field: string, value: any) => {
+  const handleInputChange = (field: string, value: unknown) => {
     setFormData(prev => ({
       ...prev,
       [field]: value
