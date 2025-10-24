@@ -1,0 +1,7 @@
+# Ignorer tous les fichiers de backup
+*.sql
+*.dump
+*.backup
+
+# Garder le dossier vide
+!.gitignore
